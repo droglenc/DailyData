@@ -1,9 +1,9 @@
 ---
-title: "Journey's Daily Data"
+title: "Journey's Daily Data 2023-24"
 format: 
   revealjs:
     theme: default
-    embed-resources: true
+    embed-resources: false
 execute:
   echo: false
 ---
@@ -13,10 +13,10 @@ execute:
 #| results: hide
 
 ## Source the data reading and cleaning script
-source("Data_Cleanup.R")
+source("scripts/Data_Cleanup.R")
 
 ## Source the graphics preparation script
-source("Graph_Prep.R")
+source("scripts/Graph_Prep.R")
 ```
 
 # Simple Summaries

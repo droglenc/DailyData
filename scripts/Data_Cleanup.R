@@ -1,6 +1,6 @@
 library(tidyverse)
 
-tmp <- data.frame(orig=names(readxl::read_excel("Tracking Myself Spreadsheet.xlsx",
+tmp <- data.frame(orig=names(readxl::read_excel("data/Tracking Myself Spreadsheet.xlsx",
                                                 n_max=1))) |>
   mutate(new=c("Timestamp",
                "training",
@@ -20,7 +20,7 @@ tmp <- data.frame(orig=names(readxl::read_excel("Tracking Myself Spreadsheet.xls
                "period",
                "focus"))
 
-df <- readxl::read_excel("Tracking Myself Spreadsheet.xlsx",
+df <- readxl::read_excel("data/Tracking Myself Spreadsheet.xlsx",
                          skip=1,col_names=tmp$new) |>
   rename(time=Timestamp) |>
   mutate(mon=lubridate::month(time,label=TRUE,abbr=TRUE),
