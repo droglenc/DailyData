@@ -1,22 +1,6 @@
 
 
 
-## How body feels
-ggplot() +
-  geom_line(data=df,mapping=aes(x=date,y=body_feel),color="gray85") +
-  geom_point(data=df,mapping=aes(x=date,y=body_feel,fill=workoutday),
-             color="gray10",pch=21) +
-  geom_vline(data=dfComp,mapping=aes(xintercept=date),
-             color="red",linetype="dotted",linewidth=1) +
-  scale_y_continuous(breaks=1:5,
-                     labels=stringr::str_wrap(levels(df$fbody_feel),width=10)) +
-  scale_x_date(breaks="2 weeks",date_labels="%b-%d") +
-  scale_fill_manual(values=c("No"="white","Yes"="gray50")) +
-  labs(title="How My Body Feels",
-       subtitle="Open points are rest days, red lines are competitions") +
-  theme_journey +
-  theme(axis.title=element_blank(),
-        legend.position="none")
 
 ## Stress level
 ggplot() +

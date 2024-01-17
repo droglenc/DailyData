@@ -25,15 +25,14 @@ source("scripts/Graph_Prep.R")
 
 ```{r}
 ggplot() +
-  geom_line(data=df,mapping=aes(x=date,y=sleep),color="gray85") +
+  geom_line(data=df,mapping=aes(x=date,y=sleep),color=clr_bkgline) +
   geom_point(data=df,mapping=aes(x=date,y=sleep,fill=workoutday),
-             color="gray10",pch=21) +
+             color=clr_pt,pch=21) +
   geom_vline(data=dfComp,mapping=aes(xintercept=date),
-             color="red",linetype="dotted",linewidth=1) +
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
   scale_y_continuous(name="Hours of Sleep") +
-  scale_x_date(breaks="2 weeks",date_labels="%b-%d") +
-  scale_fill_manual(values=c("No"="white","Yes"="gray50")) +
-  theme_journey_time +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
   theme(axis.title.x=element_blank(),
         legend.position="none") +
   labs(caption="Open points are rest days, red lines are competitions")
@@ -47,14 +46,148 @@ tmp <- df |>
   mutate(fsleep=factor(sleep)) |>
   group_by(fsleep) |>
   summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq))
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
 
 ggplot(data=tmp,mapping=aes(x=fsleep,y=perc)) +
-  geom_bar(stat="identity",color="gray10",fill="gray80") +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
   scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
-                     expand=expansion(mult=c(0,0.02)),
-                     labels=scales::label_percent()) +
-  scale_x_discrete(name="Hours of Sleep") +
-  theme_journey_time
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(name="Hours of Sleep")
+```
+
+
+## Body Feels Daily Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=body_feel),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=body_feel,fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:5,limits=c(1,5),
+                     labels=stringr::str_wrap(levels(df$fbody_feel),width=10)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+## Body Feels Summary
+
+```{r}
+tmp <- df |>
+  filter(!is.na(fbody_feel)) |>
+  group_by(fbody_feel,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
+
+ggplot(data=tmp,mapping=aes(x=fbody_feel,y=perc)) +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(labels=stringr::str_wrap(tmp$fbody_feel,width=10)) +
+  theme(axis.title.x=element_blank())
+```
+
+
+## Stress Levels Daily Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=stress_lvl),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=stress_lvl,fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:5,limits=c(1,5),
+                     labels=stringr::str_wrap(levels(df$fstress_lvl),width=10)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+## Stress Levels Summary
+
+```{r}
+tmp <- df |>
+  filter(!is.na(fstress_lvl)) |>
+  group_by(fstress_lvl,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
+
+ggplot(data=tmp,mapping=aes(x=fstress_lvl,y=perc)) +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(labels=stringr::str_wrap(tmp$fstress_lvl,width=10)) +
+  theme(axis.title.x=element_blank())
+```
+
+## Stress Sources
+
+```{r}
+tmp <- df |> 
+  summarize(Relationship=sum(stress_relationship=="Yes"),
+            Family=sum(stress_family=="Yes"),
+            Friends=sum(stress_friends=="Yes"),
+            Lonely=sum(stress_lonely=="Yes"),
+            School=sum(stress_school=="Yes"),
+            Work=sum(stress_work=="Yes"),
+            Track=sum(stress_track=="Yes"),
+            Tired=sum(stress_tired=="Yes")) |>
+  tidyr::pivot_longer(cols=Relationship:Tired,names_to="Source",values_to="freq") |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
+
+ggplot(data=tmp,mapping=aes(x=Source,y=perc)) +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days with Stress"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(name="Source of Stress") +
+  theme(axis.title.x=element_blank()) +
+  labs(caption="Note: some days had multiple stressors.")
+```
+
+
+
+
+# Relationships
+
+## Sleep and Stress Level
+
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(fsleep1)) |>
+  group_by(fsleep1,fstress_lvl,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(fsleep1) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(fsleep1,"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=fsleep1,y=fstress_lvl,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvl),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in stress level for each sleep amount")
 ```
 

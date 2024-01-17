@@ -1,4 +1,22 @@
-theme_journey_time <- theme_bw() +
+## Set color, etc characteristics for points, etc.
+clr_pt <- "gray10"
+clr_bar <- clr_pt
+clr_bkgline <- "gray85"
+clr_comp <- "red3"
+fill_bar <- "aquamarine2"
+fill_wo <- c("No"="white","Yes"="gray50")
+fill_tile <- c(low="aquamarine",high="aquamarine4")
+lty_comp <- "dashed"
+lwd_comp <- 0.5
+
+## Set some constants for axes
+brks_date <- "2 weeks"
+lbls_date <- "%b-%d"
+expy_bar <- expansion(mult=c(0,0.02))
+expy_barlbl <- expansion(mult=c(0,0.05))
+
+## Create custom themes for main and tile graphs
+theme_journey_main <- theme_bw() +
   theme(
     plot.title=element_text(face="bold",size=rel(1.25)),
     plot.title.position="plot",
@@ -22,3 +40,5 @@ theme_journey_tile <- theme_minimal() +
     legend.position="none",
     aspect.ratio=1
   )
+
+theme_set(theme_journey_main)
