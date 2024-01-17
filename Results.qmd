@@ -3,7 +3,7 @@ title: "Journey's Daily Data"
 format: 
   revealjs:
     theme: default
-    embed-resources: false
+    embed-resources: true
 execute:
   echo: false
 ---
