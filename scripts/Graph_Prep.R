@@ -1,3 +1,5 @@
+library(patchwork)
+
 ## Set color, etc characteristics for points, etc.
 clr_pt <- "gray10"
 clr_bar <- clr_pt

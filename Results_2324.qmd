@@ -21,6 +21,43 @@ source("scripts/Graph_Prep.R")
 
 # Simple Summaries
 
+## Number of Workout and Training Days
+
+```{r}
+tmp <- df |>
+  filter(!is.na(workoutday)) |>
+  group_by(workoutday,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+wod <- ggplot(data=tmp,mapping=aes(x=workoutday,y=perc)) +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(name="Workout Day?")
+
+tmp <- df |>
+  filter(!is.na(training)) |>
+  group_by(training,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+trt <- ggplot(data=tmp,mapping=aes(x=training,y=perc)) +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(name="Training Type",labels=stringr::str_wrap(tmp$training,15))
+
+wod+trt
+```
+
+
 ## Sleep Daily Series
 
 ```{r}
@@ -41,6 +78,7 @@ ggplot() +
 ## Sleep Summary
 
 ```{r}
+#| fig-width: 5.5
 tmp <- df |>
   filter(!is.na(sleep)) |>
   mutate(fsleep=factor(sleep)) |>
@@ -79,6 +117,7 @@ ggplot() +
 ## Body Feels Summary
 
 ```{r}
+#| fig-width: 5.5
 tmp <- df |>
   filter(!is.na(fbody_feel)) |>
   group_by(fbody_feel,.drop=FALSE) |>
@@ -117,6 +156,7 @@ ggplot() +
 ## Stress Levels Summary
 
 ```{r}
+#| fig-width: 5.5
 tmp <- df |>
   filter(!is.na(fstress_lvl)) |>
   group_by(fstress_lvl,.drop=FALSE) |>
@@ -160,6 +200,124 @@ ggplot(data=tmp,mapping=aes(x=Source,y=perc)) +
 ```
 
 
+## Eating Habits Daily Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=eat_habits),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=eat_habits,fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:4,limits=c(1,4),
+                     labels=stringr::str_wrap(levels(df$feat_habits),width=10)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+## Eating Habits Summary
+
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(feat_habits)) |>
+  group_by(feat_habits,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
+
+ggplot(data=tmp,mapping=aes(x=feat_habits,y=perc)) +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(labels=stringr::str_wrap(tmp$feat_habits,width=10)) +
+  theme(axis.title.x=element_blank())
+```
+
+
+
+## Electrolytes Daily Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=as.numeric(felectrolytes)),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=as.numeric(felectrolytes),fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:4,limits=c(1,4),
+                     labels=stringr::str_wrap(levels(df$felectrolytes),width=15)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+## Electrolytes Summary
+
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(felectrolytes)) |>
+  group_by(felectrolytes,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
+
+ggplot(data=tmp,mapping=aes(x=felectrolytes,y=perc)) +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(labels=stringr::str_wrap(tmp$felectrolytes,width=15)) +
+  theme(axis.title.x=element_blank())
+```
+
+
+## Alcohol Daily Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=as.numeric(alcohol)),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=as.numeric(alcohol),fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:3,limits=c(1,3),
+                     labels=stringr::str_wrap(levels(df$alcohol),width=15)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+## Alcohol Summary
+
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(alcohol)) |>
+  group_by(alcohol,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
+
+ggplot(data=tmp,mapping=aes(x=alcohol,y=perc)) +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(labels=stringr::str_wrap(tmp$alcohol,width=15)) +
+  theme(axis.title.x=element_blank())
+```
+
+
 
 
 # Relationships
@@ -191,3 +349,31 @@ ggplot(data=tmp,mapping=aes(x=fsleep1,y=fstress_lvl,fill=perc)) +
   labs(caption="% in stress level for each sleep amount")
 ```
 
+
+
+## Workouts and Eating Habits
+
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(feat_habits)) |>
+  group_by(training,feat_habits,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(training) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(training,12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=training,y=feat_habits,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$feat_habits),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in eating habit for each training type")
+```
