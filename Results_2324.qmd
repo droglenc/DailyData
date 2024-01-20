@@ -318,28 +318,60 @@ ggplot(data=tmp,mapping=aes(x=alcohol,y=perc)) +
 ```
 
 
+## Period Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=as.numeric(period)),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=as.numeric(period),fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:2,limits=c(1,2),
+                     labels=stringr::str_wrap(levels(df$period),width=15)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+
 
 
 # Relationships
 
-## Sleep and Stress Level
+## Sleep and Stress Level I
 
+
+:::: {.columns}
+
+```{r}
+tbltmp <- xtabs(~sleep,data=df)
+```
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- Hours of sleep is number of overnight hours from waking up that morning (i.e., no lag).
+- Very few days had less than 6 (n=`r cumsum(tbltmp)[["5"]]` d) or more than 9 (n=`r FSA::rcumsum(tbltmp)[["10"]]` d) hours of sleep. Thus, these were combined with 6 and 9 hours to form "&leq;6 h" and "&geq;9 h" categories.  
+:::
+
+::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
 tmp <- df |>
-  filter(!is.na(fsleep1)) |>
-  group_by(fsleep1,fstress_lvl,.drop=FALSE) |>
+  filter(!is.na(fsleep)) |>
+  group_by(fsleep,fstress_lvl,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
   ungroup()
 
 tmp1 <- tmp |>
-  group_by(fsleep1) |>
+  group_by(fsleep) |>
   summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(fsleep1,"\n(n=",n," d)"))
+  mutate(lbl=paste0(fsleep,"\n(n=",n," d)"))
 
-ggplot(data=tmp,mapping=aes(x=fsleep1,y=fstress_lvl,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=fsleep,y=fstress_lvl,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
@@ -348,7 +380,63 @@ ggplot(data=tmp,mapping=aes(x=fsleep1,y=fstress_lvl,fill=perc)) +
   theme_journey_tile +  
   labs(caption="% in stress level for each sleep amount")
 ```
+:::
+::::
 
+
+## Sleep and Stress Level II
+
+```{r}
+dftmp <- df |>
+  select(fsleep,fstress_lvl) |>
+  mutate(fstress_lvl=forcats::fct_other(fstress_lvl,
+                                        keep=c("Happy, under control",
+                                               "Great day, some spots"),
+                                        other_level="Tough"),
+         fstress_lvl=factor(fstress_lvl,levels=c("Tough",
+                                                 "Great day, some spots",
+                                                 "Happy, under control")))
+
+tmp <- dftmp |>
+  filter(!is.na(fsleep)) |>
+  group_by(fsleep,fstress_lvl,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(fsleep) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(fsleep,"\n(n=",n," d)"))
+
+tbltmp <- xtabs(~fstress_lvl+fsleep,data=dftmp)
+chitmp <- chisq.test(tbltmp)
+```
+
+
+:::: {.columns}
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- To allow for a chi-square test of association (i.e., for sample size reasons) the "Tough, but things done", "Tough, but getting through", and "Tears, hanging on" levels were combined into one level called "Tough." 
+- While there is some evidence for fewer "tough" days with increasing amount of sleep, ultimately **NO** significant association between hours of sleep and stress level was detected (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
+:::
+
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+ggplot(data=tmp,mapping=aes(x=fsleep,y=fstress_lvl,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(tmp$fstress_lvl,width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in stress level for each sleep amount")
+```
+:::
+
+::::
 
 
 ## Workouts and Eating Habits

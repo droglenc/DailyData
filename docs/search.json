@@ -124,5 +124,26 @@
     "title": "Journey’s Daily Data 2023-24",
     "section": "Alcohol Summary",
     "text": "Alcohol Summary"
+  },
+  {
+    "objectID": "Results_2324.html#period-series",
+    "href": "Results_2324.html#period-series",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Period Series",
+    "text": "Period Series"
+  },
+  {
+    "objectID": "Results_2324.html#sleep-and-stress-level-i",
+    "href": "Results_2324.html#sleep-and-stress-level-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Sleep and Stress Level I",
+    "text": "Sleep and Stress Level I\n\n\n\nHours of sleep is number of overnight hours from waking up that morning (i.e., no lag).\nVery few days had less than 6 (n=2 d) or more than 9 (n=6 d) hours of sleep. Thus, these were combined with 6 and 9 hours to form “≤6 h” and “≥9 h” categories."
+  },
+  {
+    "objectID": "Results_2324.html#sleep-and-stress-level-ii",
+    "href": "Results_2324.html#sleep-and-stress-level-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Sleep and Stress Level II",
+    "text": "Sleep and Stress Level II\n\n\n\nTo allow for a chi-square test of association (i.e., for sample size reasons) the “Tough, but things done”, “Tough, but getting through”, and “Tears, hanging on” levels were combined into one level called “Tough.”\nWhile there is some evidence for fewer “tough” days with increasing amount of sleep, ultimately NO significant association between hours of sleep and stress level was detected (p=0.131)."
   }
 ]
