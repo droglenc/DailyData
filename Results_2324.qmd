@@ -343,35 +343,24 @@ ggplot() +
 
 ## Sleep and Stress Level I
 
-
 :::: {.columns}
-
-```{r}
-tbltmp <- xtabs(~sleep,data=df)
-```
-
-::: {.column style="width: 40%; font-size: 60%;"}
-- Hours of sleep is number of overnight hours from waking up that morning (i.e., no lag).
-- Very few days had less than 6 (n=`r cumsum(tbltmp)[["5"]]` d) or more than 9 (n=`r FSA::rcumsum(tbltmp)[["10"]]` d) hours of sleep. Thus, these were combined with 6 and 9 hours to form "&leq;6 h" and "&geq;9 h" categories.  
-:::
-
 ::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
 tmp <- df |>
-  filter(!is.na(fsleep)) |>
-  group_by(fsleep,fstress_lvl,.drop=FALSE) |>
+  filter(!is.na(sleep)) |>
+  group_by(sleep,fstress_lvl,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
   ungroup()
 
 tmp1 <- tmp |>
-  group_by(fsleep) |>
+  group_by(sleep) |>
   summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(fsleep,"\n(n=",n," d)"))
+  mutate(lbl=paste0(sleep," h"))
 
-ggplot(data=tmp,mapping=aes(x=fsleep,y=fstress_lvl,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=factor(sleep),y=fstress_lvl,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
@@ -381,14 +370,26 @@ ggplot(data=tmp,mapping=aes(x=fsleep,y=fstress_lvl,fill=perc)) +
   labs(caption="% in stress level for each sleep amount")
 ```
 :::
-::::
 
+```{r}
+tbltmp1 <- xtabs(~sleep,data=df)
+tbltmp2 <- xtabs(~fstress_lvl,data=df)
+```
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- Hours of sleep is number of overnight hours from waking up that morning (i.e., no lag).
+
+- To allow for a chi-square test of association (*next slide*) ...
+  - The few days with less than 6 (n=`r cumsum(tbltmp1)[["5"]]`) or more than 9 (n=`r FSA::rcumsum(tbltmp1)[["10"]]`) hours of sleep were combined with 6 and 9 hours to form "&leq;6 h" and "&geq;9 h" categories.
+  - The few days with "Tough, but things done" (n=`r tbltmp2[["Tough, but things done"]]`), "Tough, but getting through" (n=`r tbltmp2[["Tough, but getting through"]]`), and "Tears, hanging on" (n=`r tbltmp2[["Tears, hanging on"]]`) levels were combined into one level called "Tough." 
+:::
+::::
 
 ## Sleep and Stress Level II
 
 ```{r}
 dftmp <- df |>
-  select(fsleep,fstress_lvl) |>
+  select(starts_with("fsleep"),fstress_lvl) |>
   mutate(fstress_lvl=forcats::fct_other(fstress_lvl,
                                         keep=c("Happy, under control",
                                                "Great day, some spots"),
@@ -414,12 +415,18 @@ tbltmp <- xtabs(~fstress_lvl+fsleep,data=dftmp)
 chitmp <- chisq.test(tbltmp)
 ```
 
+```{r}
+## examining time lag results
+chitmp1 <- chisq.test(xtabs(~fstress_lvl+fsleep1,data=dftmp))
+chitmp2 <- chisq.test(xtabs(~fstress_lvl+fsleep2,data=dftmp))
+chitmp7 <- chisq.test(xtabs(~fstress_lvl+fsleep7,data=dftmp))
+```
 
 :::: {.columns}
-
 ::: {.column style="width: 40%; font-size: 60%;"}
-- To allow for a chi-square test of association (i.e., for sample size reasons) the "Tough, but things done", "Tough, but getting through", and "Tears, hanging on" levels were combined into one level called "Tough." 
 - While there is some evidence for fewer "tough" days with increasing amount of sleep, ultimately **NO** significant association between hours of sleep and stress level was detected (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
+- [*Not shown*] There was no association between stress level and hours of sleep one day (p=`r formatC(chitmp1$p.value,format="f",digits=3)`) and two days (p=`r formatC(chitmp2$p.value,format="f",digits=3)`) previous.
+- [*Not shown*] There was a weak association between stress level and hours of sleep seven days previous (p=`r formatC(chitmp7$p.value,format="f",digits=3)`). There were somewhat fewer "tough" stress days than expected with less hours of sleep seven days previous.
 :::
 
 ::: {.column width="60%"}
@@ -435,12 +442,112 @@ ggplot(data=tmp,mapping=aes(x=fsleep,y=fstress_lvl,fill=perc)) +
   labs(caption="% in stress level for each sleep amount")
 ```
 :::
-
 ::::
 
 
-## Workouts and Eating Habits
+## Sleep and Body Feels I
 
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(sleep)) |>
+  group_by(sleep,fbody_feel,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(sleep) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(sleep," h"))
+
+ggplot(data=tmp,mapping=aes(x=factor(sleep),y=fbody_feel,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feel),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feel level for each sleep amount")
+```
+:::
+
+```{r}
+tbltmp1 <- xtabs(~sleep,data=df)
+tbltmp2 <- xtabs(~fbody_feel,data=df)
+```
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- Hours of sleep is number of overnight hours from waking up that morning (i.e., no lag).
+
+- To allow for a chi-square test of association (*next slide*) ...
+  - The few days with less than 6 (n=`r cumsum(tbltmp1)[["5"]]`) or more than 9 (n=`r FSA::rcumsum(tbltmp1)[["10"]]`) hours of sleep were combined with 6 and 9 hours to form "&leq;6 h" and "&geq;9 h" categories.
+  - The "Sick/Injured/Can't" level was dropped (n=`r tbltmp2[["Sick/Injured/Can't"]]`).
+:::
+::::
+
+## Sleep and Body Feels II
+
+```{r}
+dftmp <- df |>
+  select(starts_with("fsleep"),fbody_feel) |>
+  mutate(fbody_feel=forcats::fct_drop(fbody_feel))
+
+tmp <- dftmp |>
+  filter(!is.na(fsleep)) |>
+  group_by(fsleep,fbody_feel,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(fsleep) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(fsleep,"\n(n=",n," d)"))
+
+tbltmp <- xtabs(~fbody_feel+fsleep,data=dftmp)
+chitmp <- chisq.test(tbltmp)
+```
+
+```{r}
+## examining time lag results
+chitmp1 <- chisq.test(xtabs(~fbody_feel+fsleep1,data=dftmp))
+chitmp2 <- chisq.test(xtabs(~fbody_feel+fsleep2,data=dftmp))
+chitmp7 <- chisq.test(xtabs(~fbody_feel+fsleep7,data=dftmp))
+```
+
+
+:::: {.columns}
+::: {.column style="width: 40%; font-size: 55%;"}
+- There is **NO** significant association between how your body felt and hours of sleep that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`) and two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`) previous [*Not shown*].
+- [*Not shown*] There was an association between how your body felt  and hours of sleep one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`), with slightly fewer than expected "Sore, need trainer" and "Fine, getting it done" days with more sleep (>8 hr) one day previous.
+- [*Not shown*] There was an association between how your body felt and hours of sleep seven days previous (p=`r formatC(chitmp7$p.value,format="f",digits=3)`). There were somewhat more than expected "Sore, need trainer" and "Fine, getting it done" days with more sleep and more than expected "Amazing, could PR" days with less sleep seven days previous.
+:::
+
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+ggplot(data=tmp,mapping=aes(x=fsleep,y=fbody_feel,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(tmp$fbody_feel,width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feel level for each sleep amount")
+```
+:::
+::::
+
+
+## Workouts and Eating Habits I
+
+:::: {.columns}
+::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
 tmp <- df |>
@@ -465,3 +572,70 @@ ggplot(data=tmp,mapping=aes(x=training,y=feat_habits,fill=perc)) +
   theme_journey_tile +  
   labs(caption="% in eating habit for each training type")
 ```
+:::
+
+```{r}
+tbltmp1 <- xtabs(~training,data=df)
+tbltmp2 <- xtabs(~feat_habits,data=df)
+```
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- To allow for a chi-square test of association (*next slide*) ...
+  - The "Competition" days were dropped (n=`r tbltmp1[["Competition"]]`) (*can be added back later when more competitions are added*).
+  - The two "Not good, .." levels were combined to one "Not good" level (n=`r tbltmp2[["Not good, but 3 meals"]]` and `r tbltmp2[["Not good, not 3 meals"]]`). 
+:::
+::::
+
+
+## Workouts and Eating Habits II
+
+```{r}
+dftmp <- df |>
+  select(training,feat_habits) |>
+  filter(training!="Competition") |>
+  mutate(training=forcats::fct_drop(training),
+         feat_habits=forcats::fct_other(feat_habits,
+                                        keep=c("3 meals, and balanced",
+                                               "3 meals, but upset"),
+                                        other_level="Not good"),
+         feat_habits=factor(feat_habits,levels=c("Not good",
+                                                 "3 meals, but upset",
+                                                 "3 meals, and balanced")))
+
+tmp <- dftmp |>
+  filter(!is.na(feat_habits)) |>
+  group_by(training,feat_habits,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(training) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(training,"\n(n=",n," d)"))
+
+tbltmp <- xtabs(~feat_habits+training,data=dftmp)
+chitmp <- chisq.test(tbltmp)
+```
+
+:::: {.columns}
+::: {.column style="width: 40%; font-size: 60%;"}
+- There is a significant association between training type and eating habits (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
+- It appears that you eat more balanced meals and fewer "not good" meals on your training days, as compared to your rest days.
+:::
+
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+ggplot(data=tmp,mapping=aes(x=training,y=feat_habits,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$feat_habits),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in eating habit for each training type")
+```
+:::
+::::

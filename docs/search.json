@@ -137,13 +137,41 @@
     "href": "Results_2324.html#sleep-and-stress-level-i",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Sleep and Stress Level I",
-    "text": "Sleep and Stress Level I\n\n\n\nHours of sleep is number of overnight hours from waking up that morning (i.e., no lag).\nVery few days had less than 6 (n=2 d) or more than 9 (n=6 d) hours of sleep. Thus, these were combined with 6 and 9 hours to form “≤6 h” and “≥9 h” categories."
+    "text": "Sleep and Stress Level I\n\n\n\n\n\n\n\n\n\nHours of sleep is number of overnight hours from waking up that morning (i.e., no lag).\nTo allow for a chi-square test of association (next slide) …\n\nThe few days with less than 6 (n=2) or more than 9 (n=6) hours of sleep were combined with 6 and 9 hours to form “≤6 h” and “≥9 h” categories.\nThe few days with “Tough, but things done” (n=8), “Tough, but getting through” (n=7), and “Tears, hanging on” (n=4) levels were combined into one level called “Tough.”"
   },
   {
     "objectID": "Results_2324.html#sleep-and-stress-level-ii",
     "href": "Results_2324.html#sleep-and-stress-level-ii",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Sleep and Stress Level II",
-    "text": "Sleep and Stress Level II\n\n\n\nTo allow for a chi-square test of association (i.e., for sample size reasons) the “Tough, but things done”, “Tough, but getting through”, and “Tears, hanging on” levels were combined into one level called “Tough.”\nWhile there is some evidence for fewer “tough” days with increasing amount of sleep, ultimately NO significant association between hours of sleep and stress level was detected (p=0.131)."
+    "text": "Sleep and Stress Level II\n\n\n\nWhile there is some evidence for fewer “tough” days with increasing amount of sleep, ultimately NO significant association between hours of sleep and stress level was detected (p=0.131).\n[Not shown] There was no association between stress level and hours of sleep one day (p=0.707) and two days (p=0.057) previous.\n[Not shown] There was a weak association between stress level and hours of sleep seven days previous (p=0.031). There were somewhat fewer “tough” stress days than expected with less hours of sleep seven days previous."
+  },
+  {
+    "objectID": "Results_2324.html#workouts-and-eating-habits-i",
+    "href": "Results_2324.html#workouts-and-eating-habits-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Workouts and Eating Habits I",
+    "text": "Workouts and Eating Habits I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association (next slide) …\n\nThe “Competition” days were dropped (n=3) (can be added back later when more competitions are added).\nThe two “Not good, ..” levels were combined to one “Not good” level (n=6 and 0)."
+  },
+  {
+    "objectID": "Results_2324.html#workouts-and-eating-habits-ii",
+    "href": "Results_2324.html#workouts-and-eating-habits-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Workouts and Eating Habits II",
+    "text": "Workouts and Eating Habits II\n\n\n\nThere is a significant association between training type and eating habits (p=0.005).\nIt appears that you eat more balanced meals and fewer “not good” meals on your training days, as compared to your rest days."
+  },
+  {
+    "objectID": "Results_2324.html#sleep-and-body-feels-i",
+    "href": "Results_2324.html#sleep-and-body-feels-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Sleep and Body Feels I",
+    "text": "Sleep and Body Feels I\n\n\n\n\n\n\n\n\n\nHours of sleep is number of overnight hours from waking up that morning (i.e., no lag).\nTo allow for a chi-square test of association (next slide) …\n\nThe few days with less than 6 (n=2) or more than 9 (n=6) hours of sleep were combined with 6 and 9 hours to form “≤6 h” and “≥9 h” categories.\nThe “Sick/Injured/Can’t” level was dropped (n=0)."
+  },
+  {
+    "objectID": "Results_2324.html#sleep-and-body-feels-ii",
+    "href": "Results_2324.html#sleep-and-body-feels-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Sleep and Body Feels II",
+    "text": "Sleep and Body Feels II\n\n\n\nThere is NO significant association between how your body felt and hours of sleep that day (p=0.225) and two days previous (p=0.963) previous [Not shown].\n[Not shown] There was an association between how your body felt and hours of sleep one day previous (p=0.023), with slightly fewer than expected “Sore, need trainer” and “Fine, getting it done” days with more sleep (&gt;8 hr) one day previous.\n[Not shown] There was an association between how your body felt and hours of sleep seven days previous (p=0.038). There were somewhat more than expected “Sore, need trainer” and “Fine, getting it done” days with more sleep and more than expected “Amazing, could PR” days with less sleep seven days previous."
   }
 ]
