@@ -151,7 +151,7 @@
     "href": "Results_2324.html#workouts-and-eating-habits-i",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Workouts and Eating Habits I",
-    "text": "Workouts and Eating Habits I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association (next slide) …\n\nThe “Competition” days were dropped (n=3) (can be added back later when more competitions are added).\nThe two “Not good, ..” levels were combined to one “Not good” level (n=6 and 0)."
+    "text": "Workouts and Eating Habits I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association (next slide) …\n\nThe “Competition” days were dropped (n=3) (can be added back later when more competitions are added).\nThe two “Not good, ..” levels (n=6 and 0) were combined to one “Not good” level."
   },
   {
     "objectID": "Results_2324.html#workouts-and-eating-habits-ii",
@@ -173,5 +173,103 @@
     "title": "Journey’s Daily Data 2023-24",
     "section": "Sleep and Body Feels II",
     "text": "Sleep and Body Feels II\n\n\n\nThere is NO significant association between how your body felt and hours of sleep that day (p=0.225) and two days previous (p=0.963) previous [Not shown].\n[Not shown] There was an association between how your body felt and hours of sleep one day previous (p=0.023), with slightly fewer than expected “Sore, need trainer” and “Fine, getting it done” days with more sleep (&gt;8 hr) one day previous.\n[Not shown] There was an association between how your body felt and hours of sleep seven days previous (p=0.038). There were somewhat more than expected “Sore, need trainer” and “Fine, getting it done” days with more sleep and more than expected “Amazing, could PR” days with less sleep seven days previous."
+  },
+  {
+    "objectID": "Results_2324.html#period-daily-series",
+    "href": "Results_2324.html#period-daily-series",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Period Daily Series",
+    "text": "Period Daily Series"
+  },
+  {
+    "objectID": "Results_2324.html#eating-habits-and-how-body-feels-i",
+    "href": "Results_2324.html#eating-habits-and-how-body-feels-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Eating Habits and How Body Feels I",
+    "text": "Eating Habits and How Body Feels I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association, unused levels of “body feels” and “eating habits” were dropped as on previous slides\nThere was NO significant association between eating habits for the day and how your body felt that day (p=0.664)."
+  },
+  {
+    "objectID": "Results_2324.html#eating-habits-and-how-body-feels-ii",
+    "href": "Results_2324.html#eating-habits-and-how-body-feels-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Eating Habits and How Body Feels II",
+    "text": "Eating Habits and How Body Feels II\n\n\n\n\n\n\n\n\n\nThere was NO significant association between eating habits from previous day and how your body felt – one day previous (p=0.561, shown), two days previous (p=0.693, not shown), and seven days previous (p=0.459, not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#eating-habits-and-sleep-i",
+    "href": "Results_2324.html#eating-habits-and-sleep-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Eating Habits and Sleep I",
+    "text": "Eating Habits and Sleep I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association, unused levels of “eating habits” were dropped and sleep amounts were combined as on previous slides\nThere was a significant association between eating habits for the day and how much you slept that night (p=0.029). There was a tendency to sleep less when you ate worse (and sleep more when you ate better)."
+  },
+  {
+    "objectID": "Results_2324.html#eating-habits-and-how-body-feels-ii-1",
+    "href": "Results_2324.html#eating-habits-and-how-body-feels-ii-1",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Eating Habits and How Body Feels II",
+    "text": "Eating Habits and How Body Feels II\n\n\n\n\n\n\n\n\n\nThere was NO significant association between eating habits from previous days and how much you slept that day – one day previous (p=0.078, shown), two days previous (p=0.105, not shown), and two days previous (p=0.516, not shown).\nThere was slight evidence (but not significant) that you slept more on the day following when you did not eat well (shown)."
+  },
+  {
+    "objectID": "Results_2324.html#eating-habits-and-sleep-ii",
+    "href": "Results_2324.html#eating-habits-and-sleep-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Eating Habits and Sleep II",
+    "text": "Eating Habits and Sleep II\n\n\n\n\n\n\n\n\n\nThere was NO significant association between eating habits from previous days and how much you slept that day – one day previous (p=0.078, shown), two days previous (p=0.105, not shown), and seven days previous (p=0.516, not shown).\nThere was slight evidence (but not significant) that you slept more on the day following when you did not eat well (shown)."
+  },
+  {
+    "objectID": "Results_2324.html#electrolytes-and-how-body-feels-i",
+    "href": "Results_2324.html#electrolytes-and-how-body-feels-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Electrolytes and How Body Feels I",
+    "text": "Electrolytes and How Body Feels I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association, unused levels of “body feels” were dropped and electrolyte levels were pooled into “yes” (had electrolytes) or “no”\nThere was NO significant association between having electrolytes for the day and how your body felt that day (p=0.469)."
+  },
+  {
+    "objectID": "Results_2324.html#electrolytes-and-how-body-feels-ii",
+    "href": "Results_2324.html#electrolytes-and-how-body-feels-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Electrolytes and How Body Feels II",
+    "text": "Electrolytes and How Body Feels II\n\n\n\n\n\n\n\n\n\nThere was NO significant association between having electrolytes on previous days and how your body felt – one day previous (p=0.427, shown), two days previous (p=0.060, not shown), and seven days previous (p=0.355, not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#alcohol-and-how-body-feels-i",
+    "href": "Results_2324.html#alcohol-and-how-body-feels-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Alcohol and How Body Feels I",
+    "text": "Alcohol and How Body Feels I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association, unused levels of “body feels” were dropped and alcohol levels were pooled into “yes” (had electrolytes) or “no”\nThere was NO significant association between consuming alcohol for the day and how your body felt that day (p=0.304)."
+  },
+  {
+    "objectID": "Results_2324.html#alcohol-and-how-body-feels-ii",
+    "href": "Results_2324.html#alcohol-and-how-body-feels-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Alcohol and How Body Feels II",
+    "text": "Alcohol and How Body Feels II\n\n\n\n\n\n\n\n\n\nThere was NO significant association between consuming alcohol on previous days and how your body felt – one day previous (p=0.593, shown), two days previous (p=0.666, not shown), and seven days previous (p=0.629, not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#alcohol-and-stress-i",
+    "href": "Results_2324.html#alcohol-and-stress-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Alcohol and Stress I",
+    "text": "Alcohol and Stress I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association, a singular “tough” stress level was created (as preciously) and alcohol levels were pooled into “yes” (had electrolytes) or “no”\nThere was NO significant association between consuming alcohol for the day and stress levels that day (p=0.245)."
+  },
+  {
+    "objectID": "Results_2324.html#alcohol-and-stress-ii",
+    "href": "Results_2324.html#alcohol-and-stress-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Alcohol and Stress II",
+    "text": "Alcohol and Stress II\n\n\n\n\n\n\n\n\n\nThere was NO significant association between consuming alcohol on previous days and stress level – one day previous (p=0.052, shown), two days previous (p=0.071, not shown), and seven days previous (p=0.727, not shown).\nHowever, there is weak evidence for more “Happy, under control” days when having consumed alcohol the previous day (shown)"
+  },
+  {
+    "objectID": "Results_2324.html#period-and-sleep",
+    "href": "Results_2324.html#period-and-sleep",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Period and Sleep",
+    "text": "Period and Sleep\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association sleep amounts were combined as on previous slides\nThere was NO a significant association between being on your period and how much you slept that night (p=0.747)."
+  },
+  {
+    "objectID": "Results_2324.html#period-and-stress",
+    "href": "Results_2324.html#period-and-stress",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Period and Stress",
+    "text": "Period and Stress\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association, a singular “tough” stress level was created (as preciously)\nThere was NO significant association between being on your period and stress level that day (p=0.445)."
   }
 ]
