@@ -32,12 +32,14 @@ tmp <- df |>
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
   ungroup()
 
-wod <- ggplot(data=tmp,mapping=aes(x=workoutday,y=perc)) +
-  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+wod <- ggplot(data=tmp,mapping=aes(x=workoutday,y=perc,fill=workoutday)) +
+  geom_bar(stat="identity",color=clr_bar) +
   geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
   scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
                      expand=expy_barlbl,labels=scales::label_percent()) +
-  scale_x_discrete(name="Workout Day?")
+  scale_x_discrete(name="Workout Day?") +
+  scale_fill_manual(values=c("No Workout"=fill_tile[[1]],"Workout"=fill_tile[[2]])) +
+  theme(legend.position="none")
 
 tmp <- df |>
   filter(!is.na(training)) |>
@@ -47,17 +49,260 @@ tmp <- df |>
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
   ungroup()
 
-trt <- ggplot(data=tmp,mapping=aes(x=training,y=perc)) +
-  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+trt <- ggplot(data=tmp,mapping=aes(x=training,y=perc,fill=training)) +
+  geom_bar(stat="identity",color=clr_bar) +
   geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
   scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
                      expand=expy_barlbl,labels=scales::label_percent()) +
-  scale_x_discrete(name="Training Type",labels=stringr::str_wrap(tmp$training,15))
+  scale_x_discrete(name="Training Type",labels=stringr::str_wrap(tmp$training,15)) +
+  scale_fill_manual(values=c("Rest (inactive)"=fill_tile[[1]],
+                             "Rest (active)"=fill_tile[[1]],
+                             "Sprints"=fill_tile[[2]],
+                             "Jumps"=fill_tile[[2]],
+                             "Competition"=fill_tile[[2]])) +
+  theme(legend.position="none")
 
 wod+trt
 ```
 
 
+
+## Eating Habits Daily Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=eat_habits),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=eat_habits,fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:4,limits=c(1,4),
+                     labels=stringr::str_wrap(levels(df$feat_habits),width=10)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+## Eating Habits Summary
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(feat_habits)) |>
+  group_by(feat_habits,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
+
+ggplot(data=tmp,mapping=aes(x=feat_habits,y=perc)) +
+  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(labels=stringr::str_wrap(tmp$feat_habits,width=10)) +
+  theme(axis.title.x=element_blank())
+```
+:::
+
+```{r}
+tbltmp1 <- xtabs(~feat_habits,data=df)
+```
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- For statistical analyses (*later*) the few "Not good, not 3 meals" days (n=`r tbltmp1[["Not good, not 3 meals"]]`) were combined with "Not good, but 3 meals" days to form a "Not good" level.
+:::
+::::
+
+
+
+## Electrolytes Daily Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=as.numeric(felectrolytes)),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=as.numeric(felectrolytes),fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:4,limits=c(1,4),
+                     labels=stringr::str_wrap(levels(df$felectrolytes),width=15)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+## Electrolytes Summary
+:::: {.columns}
+::: {.column width="60%"}
+
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(felectrolytes)) |>
+  group_by(felectrolytes,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
+
+ggplot(data=tmp,mapping=aes(x=felectrolytes,y=perc,fill=felectrolytes)) +
+  geom_bar(stat="identity",color=clr_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(labels=stringr::str_wrap(tmp$felectrolytes,width=15)) +
+  scale_fill_manual(values=c("No"=fill_tile[[1]],
+                             "During practice"=fill_tile[[2]],
+                             "After practice"=fill_tile[[2]],
+                             "After 1 of 2 practices"=fill_tile[[2]])) +
+  theme(legend.position="none",
+        axis.title.x=element_blank())
+```
+:::
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- For statistical analyses (*later*) the electrolytes variable was simplified to "No" (no electrolytes that day) and "Yes" (electrolytes that day in some way).
+:::
+::::
+
+
+
+## Alcohol Daily Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=as.numeric(alcohol)),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=as.numeric(alcohol),fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:3,limits=c(1,3),
+                     labels=stringr::str_wrap(levels(df$alcohol),width=15)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+## Alcohol Summary
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(alcohol)) |>
+  group_by(alcohol,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
+
+ggplot(data=tmp,mapping=aes(x=alcohol,y=perc,fill=alcohol)) +
+  geom_bar(stat="identity",color=clr_bar) +
+  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
+  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
+                     expand=expy_barlbl,labels=scales::label_percent()) +
+  scale_x_discrete(labels=stringr::str_wrap(tmp$alcohol,width=15)) +
+  scale_fill_manual(values=c("No"=fill_tile[[1]],
+                             "Yes (<2)"=fill_tile[[2]],
+                             "Yes (>2)"=fill_tile[[2]])) +
+  theme(legend.position="none",
+        axis.title.x=element_blank())
+```
+:::
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- For statistical analyses (*later*) the alcohol variable was simplified to "No" (no alcohol that day) and "Yes" (some alcohol that day).
+:::
+::::
+
+
+
+## Period Daily Series
+
+```{r}
+ggplot() +
+  geom_line(data=df,mapping=aes(x=date,y=as.numeric(period)),color=clr_bkgline) +
+  geom_point(data=df,mapping=aes(x=date,y=as.numeric(period),fill=workoutday),
+             color=clr_pt,pch=21) +
+  geom_vline(data=dfComp,mapping=aes(xintercept=date),
+             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
+  scale_y_continuous(breaks=1:2,limits=c(1,2),
+                     labels=stringr::str_wrap(levels(df$period),width=15)) +
+  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
+  scale_fill_manual(values=fill_wo) +
+  theme(axis.title=element_blank(),
+        legend.position="none") +
+  labs(caption="Open points are rest days, red lines are competitions")
+```
+
+
+# Analysis Explanations
+## Explanation of Relationships Tables I
+:::: {.columns}
+::: {.column style="width: 40%; font-size: 55%;"}
+- This is an example of how sleep amount may impact how your body feels.
+    - Response/Dependent variable (e.g., how your body feels) is in *rows*.
+    - Explanatory/Independent variable (e.g., sleep amount) is in *columns*.
+- Percentages are computed by column.
+    - Thus, each column sums to 100% (within rounding).
+    - For example, upper-left cell says that on 29% of the days you slept for 6 h or less your body felt amazing like you could PR.
+- Colors get darker as the percentage increases.
+- Generally compare columns to each other (e.g., to see if how your body feels differs among amounts of sleep).
+:::
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmp <- df |>
+  filter(!is.na(fsleep)) |>
+  group_by(fsleep,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(fsleep) |>
+  summarize(n=sum(freq))
+
+tmpplot <- ggplot(data=tmp,mapping=aes(x=fsleep,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feelZ),width=12)) +  
+  scale_x_discrete(position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feel level for each sleep amount")
+tmpplot
+```
+:::
+::::
+
+
+## Explanation of Relationships Tables II
+:::: {.columns}
+::: {.column style="width: 40%; font-size: 55%;"}
+- A chi-square test tests if there is an association between the response/dependent and explanatory/independent variables.
+- Alternatively, think of it as testing if the percentages are statistically equal across columns (e.g., is the percentage of days in the body feels levels for &leq; 6h the same as for 7 h and 8 h and &geq; 9 h?).
+- "Small" p-values (usually &lt; 0.05) mean that there **IS** an association, the percentages differ across the columns, and the explanatory/independent variable may have an effect on the response/dependent variable.
+    - Note that small p-values are not common with small sample sizes in each cell (i.e., with either few days, many cells in the table, or both).
+
+:::
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpplot
+```
+:::
+::::
+
+
+
+# Sleep Analysis
 ## Sleep Daily Series
 
 ```{r}
@@ -75,8 +320,11 @@ ggplot() +
   labs(caption="Open points are rest days, red lines are competitions")
 ```
 
-## Sleep Summary
+- <span style="font-size: 75%">Sleep is number of overnight hours to waking up that day's morning.</span>
 
+## Sleep Summary
+:::: {.columns}
+::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
 tmp <- df |>
@@ -94,7 +342,229 @@ ggplot(data=tmp,mapping=aes(x=fsleep,y=perc)) +
                      expand=expy_barlbl,labels=scales::label_percent()) +
   scale_x_discrete(name="Hours of Sleep")
 ```
+:::
 
+```{r}
+tbltmp1 <- xtabs(~sleep,data=df)
+```
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- For statistical analyses (*next*) the few days with less than 6 (n=`r cumsum(tbltmp1)[["5"]]`) or more than 9 (n=`r FSA::rcumsum(tbltmp1)[["10"]]`) hours of sleep were combined with 6 and 9 hours to form "&leq;6 h" and "&geq;9 h" categories.
+:::
+::::
+
+
+## Stress and Sleep
+
+<p style="font-size: 75%;">*Question: Do you get less sleep after days with more stress?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(fsleep1=lead(fsleep,n=1))
+
+tmp <- tmpdf |>
+  filter(!is.na(fsleep1)) |>
+  group_by(fstress_lvlZ,fsleep1,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(fstress_lvlZ) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(fstress_lvlZ,width=12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=fstress_lvlZ,y=fsleep1,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +
+  labs(caption="% in sleep amounts for each stress level")
+
+chitmp <- chisq.test(xtabs(~fstress_lvlZ+fsleep1,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between hours of sleep that night after that day's stress level (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+
+&nbsp;
+
+- *Note that the three "worst" stress levels were combined to one level called "Tough" as will be described <a href="#/stress-summary">here</a>.*
+:::
+::::
+
+
+## Workouts and Sleep
+
+<p style="font-size: 75%;">*Question: Do you get more sleep when you do not have a workout that day?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df
+
+tmp <- tmpdf |>
+  filter(!is.na(fsleep)) |>
+  group_by(workoutday,fsleep,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(workoutday) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(workoutday,width=12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=workoutday,y=fsleep,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +
+  labs(caption="% in sleep amounts for each workout day level")
+
+chitmp <- chisq.test(xtabs(~workoutday+fsleep,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There **was** an association between hours of sleep that night prior to a workout day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+- There is evidence that you get more sleep prior to workout days.
+:::
+::::
+
+
+## Eating Habits and Sleep
+
+<p style="font-size: 75%;">*Question: Do you get less sleep when you eat more poorly that day?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(fsleep1=lead(fsleep,n=1))
+
+tmp <- tmpdf |>
+  filter(!is.na(fsleep1)) |>
+  group_by(feat_habitsZ,fsleep1,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(feat_habitsZ) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(feat_habitsZ,width=12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=feat_habitsZ,y=fsleep1,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +
+  labs(caption="% in sleep amounts for each alcohol level")
+
+chitmp <- chisq.test(xtabs(~feat_habitsZ+fsleep1,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between hours of sleep the night after the day's eating habit (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+:::
+::::
+
+
+## Alcohol and Sleep
+
+<p style="font-size: 75%;">*Question: Do you get less sleep when you have consumed alcohol that day?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(fsleep1=lead(fsleep,n=1))
+
+tmp <- tmpdf |>
+  filter(!is.na(fsleep1)) |>
+  group_by(alcoholb,fsleep1,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(alcoholb) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(alcoholb,width=12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=alcoholb,y=fsleep1,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +
+  labs(caption="% in sleep amounts for each alcohol level")
+
+chitmp <- chisq.test(xtabs(~alcoholb+fsleep1,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between hours of sleep that night after the day where you consumed alcohol or not (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+:::
+::::
+
+
+## Perod and Sleep
+
+<p style="font-size: 75%;">*Question: Do you get more or less sleep when you are on your period?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(fsleep1=lead(fsleep,n=1))
+
+tmp <- tmpdf |>
+  filter(!is.na(fsleep1),!is.na(period)) |>
+  group_by(period,fsleep1,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(period) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(period,width=12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=period,y=fsleep1,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +
+  labs(caption="% in sleep amounts for each alcohol level")
+
+chitmp <- chisq.test(xtabs(~period+fsleep1,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between hours of sleep and whether you were on your period or not (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+:::
+::::
+
+
+
+# How My Body Feels Analysis
 
 ## Body Feels Daily Series
 
@@ -115,7 +585,8 @@ ggplot() +
 ```
 
 ## Body Feels Summary
-
+:::: {.columns}
+::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
 tmp <- df |>
@@ -133,9 +604,439 @@ ggplot(data=tmp,mapping=aes(x=fbody_feel,y=perc)) +
   scale_x_discrete(labels=stringr::str_wrap(tmp$fbody_feel,width=10)) +
   theme(axis.title.x=element_blank())
 ```
+:::
+
+```{r}
+tbltmp1 <- xtabs(~fbody_feel,data=df)
+```
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- For statistical analyses (*later*) the "Sick/Injured/Can't" level with few days (n=`r tbltmp1[["Sick/Injured/Can't"]]`) was combined with the "Sore, need trainer" level to form a new "Need trainer or Can't" level.
+:::
+::::
 
 
-## Stress Levels Daily Series
+
+## Workout and Body Feels
+
+<p style="font-size: 75%;">*Question: Does your body feel differently depending on whether you worked out that day or not?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(workoutday1=lag(workoutday,n=1),
+         workoutday2=lag(workoutday,n=2))
+
+tmp <- tmpdf |>
+  group_by(workoutday,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(workoutday) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(workoutday,12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=workoutday,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feelZ),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feels level for each workout level")
+
+chitmp <- chisq.test(xtabs(~workoutday+fbody_feelZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~workoutday1+fbody_feelZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~workoutday2+fbody_feelZ,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between whether you worked out or not and how your body felt that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+- However, there is some evidence that you felt somewhat better when you did not work out.
+
+&nbsp;
+
+- There was no association between whether you worked out or not on previous days and how your body felt -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table not shown*) or two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
+:::
+::::
+
+
+
+## Lifting and Body Feels
+
+<p style="font-size: 75%;">*Question: Does your body feel differently depending on whether you lifted that day or not?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(lift1=lag(lift,n=1),
+         lift2=lag(lift,n=2))
+
+tmp <- tmpdf |>
+  group_by(lift,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(lift) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(lift,12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=lift,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feelZ),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feels level for each lift level")
+
+chitmp <- chisq.test(xtabs(~lift+fbody_feelZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~lift1+fbody_feelZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~lift2+fbody_feelZ,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between whether you lifted or not and how your body felt that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+
+&nbsp;
+
+- There was no association between whether youlifted or not on previous days and how your body felt -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table not shown*) or two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
+:::
+::::
+
+
+
+## Sleep and Body Feels I
+
+<p style="font-size: 75%;">*Question: Does your body feel better when you get more sleep?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(fsleep1=lag(fsleep,n=1),
+         fsleep2=lag(fsleep,n=2))
+
+tmp <- tmpdf |>
+  filter(!is.na(fsleep)) |>
+  group_by(fsleep,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(fsleep) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(fsleep,"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=fsleep,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(tmp$fbody_feelZ,width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feel level for each sleep amount")
+
+chitmp <- chisq.test(xtabs(~fbody_feelZ+fsleep,data=tmpdf))
+## examining time lag results
+chitmp1 <- chisq.test(xtabs(~fbody_feelZ+fsleep1,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~fbody_feelZ+fsleep2,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 55%;"}
+- There was no association between how your body felt and hours of sleep that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+:::
+::::
+
+
+## Sleep and Body Feels II
+
+<p style="font-size: 75%;">*Question: Does your body feel better when you get more sleep on previous days?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmp <- tmpdf |>
+  filter(!is.na(fsleep2)) |>
+  group_by(fsleep2,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(fsleep2) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(fsleep2,"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=fsleep2,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(tmp$fbody_feelZ,width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feel level for each sleep amount")
+```
+:::
+::: {.column style="width: 40%; font-size: 55%;"}
+- There **was** an association between how your body felt and hours of sleep one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table shown*).
+- There is evidence that you have slightly fewer "Need trainer or Can't" and "Fine, getting it done" days with more sleep (>9 hr) one day previous.
+
+&nbsp;
+
+- There is no association between how your body felt and hours of sleep two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
+:::
+::::
+
+
+
+## Eating Habits and Body Feels
+
+<p style="font-size: 75%;">*Question: Does your body feel better if you eat better that day (or previous days)?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(feat_habitsZ1=lag(feat_habitsZ,n=1),
+         feat_habitsZ2=lag(feat_habitsZ,n=2))
+
+tmp <- tmpdf |>
+  group_by(feat_habitsZ,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(feat_habitsZ) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(feat_habitsZ,12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=feat_habitsZ,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feelZ),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feels level for each eating habit")
+
+chitmp <- chisq.test(xtabs(~feat_habitsZ+fbody_feelZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~feat_habitsZ1+fbody_feelZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~feat_habitsZ2+fbody_feelZ,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between eating habits for the day and how your body felt that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+
+&nbsp;
+
+- There was no association between eating habits from previous days and how your body felt -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table not shown*) or two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
+:::
+::::
+
+
+
+## Electrolytes and Body Feels
+
+<p style="font-size: 75%;">*Question: Does your body feel better if you drink electrolytes that day?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(electrolytesb1=lag(electrolytesb,n=1),
+         electrolytesb2=lag(electrolytesb,n=2))
+
+tmp <- tmpdf |>
+  group_by(electrolytesb,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(electrolytesb) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(electrolytesb,12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=electrolytesb,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feelZ),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feels level for each electrolytes level")
+
+chitmp <- chisq.test(xtabs(~electrolytesb+fbody_feelZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~electrolytesb1+fbody_feelZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~electrolytesb2+fbody_feelZ,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between having electrolytes for the day and how your body felt that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+
+&nbsp;
+
+- There was no association between having electrolytes on previous days and how your body felt -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table not shown*) or  two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
+:::
+::::
+
+
+
+## Alcohol and Body Feels I
+
+<p style="font-size: 75%;">*Question: Does your body feel better if you drink alcohol that day?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(alcoholb1=lag(alcoholb,n=1),
+         alcoholb2=lag(alcoholb,n=2))
+
+tmp <- tmpdf |>
+  group_by(alcoholb,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(alcoholb) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(alcoholb,12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=alcoholb,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feelZ),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feels level for each alcohol level")
+
+chitmp <- chisq.test(xtabs(~alcoholb+fbody_feelZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~alcoholb1+fbody_feelZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~alcoholb2+fbody_feelZ,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between having alcohol for the day and how your body felt that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+:::
+::::
+
+
+## Alcohol and Body Feels II
+
+<p style="font-size: 75%;">*Question: Does your body feel better if you drink alcohol on previous days?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmp <- tmpdf |>
+  filter(!is.na(alcoholb1)) |>
+  group_by(alcoholb1,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(alcoholb1) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(alcoholb1,12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=alcoholb1,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feelZ),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feels level for each alcohol level")
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between having alcohol on previous days and how your body felt -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table shown*) or two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
+:::
+::::
+
+
+
+## Period and Body Feels
+
+<p style="font-size: 75%;">*Question: Does your body feel worse if you are on your period?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df
+
+tmp <- tmpdf |>
+  filter(!is.na(period)) |>
+  group_by(period,fbody_feelZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(period) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(period,12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=period,y=fbody_feelZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feelZ),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in body feels level for each period level")
+
+chitmp <- chisq.test(xtabs(~period+fbody_feelZ,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between being on your period for the day and how your body felt that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+- However, there is some indication that your body feels "worse" when on your period.
+:::
+::::
+
+
+
+# Stress Analysis
+
+## Stress Daily Series
 
 ```{r}
 ggplot() +
@@ -153,8 +1054,10 @@ ggplot() +
   labs(caption="Open points are rest days, red lines are competitions")
 ```
 
-## Stress Levels Summary
 
+## Stress Summary
+:::: {.columns}
+::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
 tmp <- df |>
@@ -164,14 +1067,31 @@ tmp <- df |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
 
-ggplot(data=tmp,mapping=aes(x=fstress_lvl,y=perc)) +
-  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
+ggplot(data=tmp,mapping=aes(x=fstress_lvl,y=perc,fill=fstress_lvl)) +
+  geom_bar(stat="identity",color=clr_bar) +
   geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
   scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
                      expand=expy_barlbl,labels=scales::label_percent()) +
   scale_x_discrete(labels=stringr::str_wrap(tmp$fstress_lvl,width=10)) +
-  theme(axis.title.x=element_blank())
+  scale_fill_manual(values=c("Tears, hanging on"=fill_tile[[1]],
+                             "Tough, but getting through"=fill_tile[[1]],
+                             "Tough, but things done"=fill_tile[[1]],
+                             "Great day, some spots"=fill_tile[[2]],
+                             "Happy, under control"=fill_tile[[2]])) +
+  theme(legend.position="none",
+        axis.title.x=element_blank())
 ```
+:::
+
+```{r}
+tbltmp1 <- xtabs(~fstress_lvl,data=df)
+```
+
+::: {.column style="width: 40%; font-size: 60%;"}
+- For statistical analyses (*later*) the "Tears, hanging on" (n=`r tbltmp1[["Tears, hanging on"]]`), "Tough, but getting through" (n=`r tbltmp1[["Tough, but getting through"]]`), and "Tough, but things done" (n=`r tbltmp1[["Tough, but things done"]]`) levels were combined into a "Tough" level.
+:::
+::::
+
 
 ## Stress Sources
 
@@ -200,207 +1120,123 @@ ggplot(data=tmp,mapping=aes(x=Source,y=perc)) +
 ```
 
 
-## Eating Habits Daily Series
 
-```{r}
-ggplot() +
-  geom_line(data=df,mapping=aes(x=date,y=eat_habits),color=clr_bkgline) +
-  geom_point(data=df,mapping=aes(x=date,y=eat_habits,fill=workoutday),
-             color=clr_pt,pch=21) +
-  geom_vline(data=dfComp,mapping=aes(xintercept=date),
-             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
-  scale_y_continuous(breaks=1:4,limits=c(1,4),
-                     labels=stringr::str_wrap(levels(df$feat_habits),width=10)) +
-  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
-  scale_fill_manual(values=fill_wo) +
-  theme(axis.title=element_blank(),
-        legend.position="none") +
-  labs(caption="Open points are rest days, red lines are competitions")
-```
+## Workout and Stress Level
 
-## Eating Habits Summary
-
-```{r}
-#| fig-width: 5.5
-tmp <- df |>
-  filter(!is.na(feat_habits)) |>
-  group_by(feat_habits,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
-
-ggplot(data=tmp,mapping=aes(x=feat_habits,y=perc)) +
-  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
-  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
-  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
-                     expand=expy_barlbl,labels=scales::label_percent()) +
-  scale_x_discrete(labels=stringr::str_wrap(tmp$feat_habits,width=10)) +
-  theme(axis.title.x=element_blank())
-```
-
-
-
-## Electrolytes Daily Series
-
-```{r}
-ggplot() +
-  geom_line(data=df,mapping=aes(x=date,y=as.numeric(felectrolytes)),color=clr_bkgline) +
-  geom_point(data=df,mapping=aes(x=date,y=as.numeric(felectrolytes),fill=workoutday),
-             color=clr_pt,pch=21) +
-  geom_vline(data=dfComp,mapping=aes(xintercept=date),
-             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
-  scale_y_continuous(breaks=1:4,limits=c(1,4),
-                     labels=stringr::str_wrap(levels(df$felectrolytes),width=15)) +
-  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
-  scale_fill_manual(values=fill_wo) +
-  theme(axis.title=element_blank(),
-        legend.position="none") +
-  labs(caption="Open points are rest days, red lines are competitions")
-```
-
-## Electrolytes Summary
-
-```{r}
-#| fig-width: 5.5
-tmp <- df |>
-  filter(!is.na(felectrolytes)) |>
-  group_by(felectrolytes,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
-
-ggplot(data=tmp,mapping=aes(x=felectrolytes,y=perc)) +
-  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
-  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
-  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
-                     expand=expy_barlbl,labels=scales::label_percent()) +
-  scale_x_discrete(labels=stringr::str_wrap(tmp$felectrolytes,width=15)) +
-  theme(axis.title.x=element_blank())
-```
-
-
-## Alcohol Daily Series
-
-```{r}
-ggplot() +
-  geom_line(data=df,mapping=aes(x=date,y=as.numeric(alcohol)),color=clr_bkgline) +
-  geom_point(data=df,mapping=aes(x=date,y=as.numeric(alcohol),fill=workoutday),
-             color=clr_pt,pch=21) +
-  geom_vline(data=dfComp,mapping=aes(xintercept=date),
-             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
-  scale_y_continuous(breaks=1:3,limits=c(1,3),
-                     labels=stringr::str_wrap(levels(df$alcohol),width=15)) +
-  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
-  scale_fill_manual(values=fill_wo) +
-  theme(axis.title=element_blank(),
-        legend.position="none") +
-  labs(caption="Open points are rest days, red lines are competitions")
-```
-
-## Alcohol Summary
-
-```{r}
-#| fig-width: 5.5
-tmp <- df |>
-  filter(!is.na(alcohol)) |>
-  group_by(alcohol,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%"))
-
-ggplot(data=tmp,mapping=aes(x=alcohol,y=perc)) +
-  geom_bar(stat="identity",color=clr_bar,fill=fill_bar) +
-  geom_text(mapping=aes(label=perc_lbl),vjust=-0.25) +
-  scale_y_continuous(name=str_glue("Percentage of {sum(tmp$freq)} Days"),
-                     expand=expy_barlbl,labels=scales::label_percent()) +
-  scale_x_discrete(labels=stringr::str_wrap(tmp$alcohol,width=15)) +
-  theme(axis.title.x=element_blank())
-```
-
-
-## Period Daily Series
-
-```{r}
-ggplot() +
-  geom_line(data=df,mapping=aes(x=date,y=as.numeric(period)),color=clr_bkgline) +
-  geom_point(data=df,mapping=aes(x=date,y=as.numeric(period),fill=workoutday),
-             color=clr_pt,pch=21) +
-  geom_vline(data=dfComp,mapping=aes(xintercept=date),
-             color=clr_comp,linetype=lty_comp,linewidth=lwd_comp) +
-  scale_y_continuous(breaks=1:2,limits=c(1,2),
-                     labels=stringr::str_wrap(levels(df$period),width=15)) +
-  scale_x_date(breaks=brks_date,date_labels=lbls_date) +
-  scale_fill_manual(values=fill_wo) +
-  theme(axis.title=element_blank(),
-        legend.position="none") +
-  labs(caption="Open points are rest days, red lines are competitions")
-```
-
-
-
-
-# Relationships
-
-## Sleep and Stress Level I
+<p style="font-size: 75%;">*Question: Does your stress level depend on whether you worked out that day or not?*</p>
 
 :::: {.columns}
 ::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
-tmp <- df |>
-  filter(!is.na(sleep)) |>
-  group_by(sleep,fstress_lvl,.drop=FALSE) |>
+tmpdf <- df |>
+  mutate(workoutday1=lag(workoutday,n=1),
+         workoutday2=lag(workoutday,n=2))
+
+tmp <- tmpdf |>
+  group_by(workoutday,fstress_lvlZ,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
   ungroup()
 
 tmp1 <- tmp |>
-  group_by(sleep) |>
+  group_by(workoutday) |>
   summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(sleep," h"))
+  mutate(lbl=paste0(str_wrap(workoutday,12),"\n(n=",n," d)"))
 
-ggplot(data=tmp,mapping=aes(x=factor(sleep),y=fstress_lvl,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=workoutday,y=fstress_lvlZ,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvl),width=12)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvlZ),width=12)) +  
   scale_x_discrete(labels=tmp1$lbl,position="top") +  
   theme_journey_tile +  
-  labs(caption="% in stress level for each sleep amount")
+  labs(caption="% in stress level for each workout level")
+
+chitmp <- chisq.test(xtabs(~workoutday+fstress_lvlZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~workoutday1+fstress_lvlZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~workoutday2+fstress_lvlZ,data=tmpdf))
 ```
 :::
-
-```{r}
-tbltmp1 <- xtabs(~sleep,data=df)
-tbltmp2 <- xtabs(~fstress_lvl,data=df)
-```
-
 ::: {.column style="width: 40%; font-size: 60%;"}
-- Hours of sleep is number of overnight hours from waking up that morning (i.e., no lag).
+- There was no association between whether you worked out or not and your stress level for that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
 
-- To allow for a chi-square test of association (*next slide*) ...
-  - The few days with less than 6 (n=`r cumsum(tbltmp1)[["5"]]`) or more than 9 (n=`r FSA::rcumsum(tbltmp1)[["10"]]`) hours of sleep were combined with 6 and 9 hours to form "&leq;6 h" and "&geq;9 h" categories.
-  - The few days with "Tough, but things done" (n=`r tbltmp2[["Tough, but things done"]]`), "Tough, but getting through" (n=`r tbltmp2[["Tough, but getting through"]]`), and "Tears, hanging on" (n=`r tbltmp2[["Tears, hanging on"]]`) levels were combined into one level called "Tough." 
+&nbsp;
+
+- There was no association between whether you worked out or not on previous days and your stress level -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table not shown*) or two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
 :::
 ::::
 
-## Sleep and Stress Level II
 
+
+## Lifting and Stress Level
+
+<p style="font-size: 75%;">*Question: Does your stress level depend on whether you lifted that day or not?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
 ```{r}
-dftmp <- df |>
-  select(starts_with("fsleep"),fstress_lvl) |>
-  mutate(fstress_lvl=forcats::fct_other(fstress_lvl,
-                                        keep=c("Happy, under control",
-                                               "Great day, some spots"),
-                                        other_level="Tough"),
-         fstress_lvl=factor(fstress_lvl,levels=c("Tough",
-                                                 "Great day, some spots",
-                                                 "Happy, under control")))
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(lift1=lag(lift,n=1),
+         lift2=lag(lift,n=2))
 
-tmp <- dftmp |>
+tmp <- tmpdf |>
+  group_by(lift,fstress_lvlZ,.drop=FALSE) |>
+  summarize(freq=n()) |>
+  mutate(perc=freq/sum(freq),
+         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
+  ungroup()
+
+tmp1 <- tmp |>
+  group_by(lift) |>
+  summarize(n=sum(freq)) |>
+  mutate(lbl=paste0(str_wrap(lift,12),"\n(n=",n," d)"))
+
+ggplot(data=tmp,mapping=aes(x=lift,y=fstress_lvlZ,fill=perc)) +
+  geom_tile() +  
+  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
+  geom_text(aes(label=perc_lbl)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvlZ),width=12)) +  
+  scale_x_discrete(labels=tmp1$lbl,position="top") +  
+  theme_journey_tile +  
+  labs(caption="% in stress level for each lift level")
+
+chitmp <- chisq.test(xtabs(~lift+fstress_lvlZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~lift1+fstress_lvlZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~lift2+fstress_lvlZ,data=tmpdf))
+```
+:::
+::: {.column style="width: 40%; font-size: 60%;"}
+- There was no association between whether you lifted or not and your stress level that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+
+&nbsp;
+
+- There was no association between whether you lifted or not on previous days and your stress level -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table not shown*) or two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
+:::
+::::
+
+
+
+## Sleep and Stress Level
+
+<p style="font-size: 75%;">*Question: Is your level of stress lower with more sleep the night (or two nights) before?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
+```{r}
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(fsleep1=lag(fsleep,n=1),
+         fsleep2=lag(fsleep,n=2),
+         fsleep7=lag(fsleep,n=7))
+
+tmp <- tmpdf |>
   filter(!is.na(fsleep)) |>
-  group_by(fsleep,fstress_lvl,.drop=FALSE) |>
+  group_by(fsleep,fstress_lvlZ,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
@@ -409,478 +1245,97 @@ tmp <- dftmp |>
 tmp1 <- tmp |>
   group_by(fsleep) |>
   summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(fsleep,"\n(n=",n," d)"))
+  mutate(lbl=paste0(str_wrap(fsleep,width=12),"\n(n=",n," d)"))
 
-tbltmp <- xtabs(~fstress_lvl+fsleep,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
-```{r}
-## examining time lag results
-chitmp1 <- chisq.test(xtabs(~fstress_lvl+fsleep1,data=dftmp))
-chitmp2 <- chisq.test(xtabs(~fstress_lvl+fsleep2,data=dftmp))
-chitmp7 <- chisq.test(xtabs(~fstress_lvl+fsleep7,data=dftmp))
-```
-
-:::: {.columns}
-::: {.column style="width: 40%; font-size: 60%;"}
-- While there is some evidence for fewer "tough" days with increasing amount of sleep, ultimately **NO** significant association between hours of sleep and stress level was detected (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
-- [*Not shown*] There was no association between stress level and hours of sleep one day (p=`r formatC(chitmp1$p.value,format="f",digits=3)`) and two days (p=`r formatC(chitmp2$p.value,format="f",digits=3)`) previous.
-- [*Not shown*] There was a weak association between stress level and hours of sleep seven days previous (p=`r formatC(chitmp7$p.value,format="f",digits=3)`). There were somewhat fewer "tough" stress days than expected with less hours of sleep seven days previous.
-:::
-
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-ggplot(data=tmp,mapping=aes(x=fsleep,y=fstress_lvl,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=fsleep,y=fstress_lvlZ,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(tmp$fstress_lvl,width=12)) +  
+  scale_y_discrete(labels=str_wrap(tmp$fstress_lvlZ,width=12)) +  
   scale_x_discrete(labels=tmp1$lbl,position="top") +  
   theme_journey_tile +  
   labs(caption="% in stress level for each sleep amount")
+
+chitmp <- chisq.test(xtabs(~fstress_lvlZ+fsleep,data=tmpdf))
+chitmp1 <- chisq.test(xtabs(~fstress_lvlZ+fsleep1,data=tmpdf))
 ```
 :::
-::::
-
-
-## Sleep and Body Feels I
-
-:::: {.columns}
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-tmp <- df |>
-  filter(!is.na(sleep)) |>
-  group_by(sleep,fbody_feel,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(sleep) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(sleep," h"))
-
-ggplot(data=tmp,mapping=aes(x=factor(sleep),y=fbody_feel,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feel),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in body feel level for each sleep amount")
-```
-:::
-
-```{r}
-tbltmp1 <- xtabs(~sleep,data=df)
-tbltmp2 <- xtabs(~fbody_feel,data=df)
-```
-
 ::: {.column style="width: 40%; font-size: 60%;"}
-- Hours of sleep is number of overnight hours from waking up that morning (i.e., no lag).
+- There was no association between stress level and hours of sleep the previous night (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+- However, there is some evidence that you have more "tough" days following lower hours of sleep.
 
-- To allow for a chi-square test of association (*next slide*) ...
-  - The few days with less than 6 (n=`r cumsum(tbltmp1)[["5"]]`) or more than 9 (n=`r FSA::rcumsum(tbltmp1)[["10"]]`) hours of sleep were combined with 6 and 9 hours to form "&leq;6 h" and "&geq;9 h" categories.
-  - The "Sick/Injured/Can't" level was dropped (n=`r tbltmp2[["Sick/Injured/Can't"]]`).
+&nbsp;
+
+- There was no association between stress level and hours of sleep from the previous day (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table not shown*).
 :::
 ::::
 
-## Sleep and Body Feels II
 
+
+## Eating Habits and Stress Level
+
+<p style="font-size: 75%;">*Question: Is your stress level lower if you eat better that day (or previous days)?*</p>
+
+:::: {.columns}
+::: {.column width="60%"}
 ```{r}
-dftmp <- df |>
-  select(starts_with("fsleep"),fbody_feel) |>
-  mutate(fbody_feel=forcats::fct_drop(fbody_feel))
+#| fig-width: 5.5
+tmpdf <- df |>
+  mutate(feat_habitsZ1=lag(feat_habitsZ,n=1),
+         feat_habitsZ2=lag(feat_habitsZ,n=2))
 
-tmp <- dftmp |>
-  filter(!is.na(fsleep)) |>
-  group_by(fsleep,fbody_feel,.drop=FALSE) |>
+tmp <- tmpdf |>
+  group_by(feat_habitsZ,fstress_lvlZ,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
   ungroup()
 
 tmp1 <- tmp |>
-  group_by(fsleep) |>
+  group_by(feat_habitsZ) |>
   summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(fsleep,"\n(n=",n," d)"))
+  mutate(lbl=paste0(str_wrap(feat_habitsZ,12),"\n(n=",n," d)"))
 
-tbltmp <- xtabs(~fbody_feel+fsleep,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
-```{r}
-## examining time lag results
-chitmp1 <- chisq.test(xtabs(~fbody_feel+fsleep1,data=dftmp))
-chitmp2 <- chisq.test(xtabs(~fbody_feel+fsleep2,data=dftmp))
-chitmp7 <- chisq.test(xtabs(~fbody_feel+fsleep7,data=dftmp))
-```
-
-
-:::: {.columns}
-::: {.column style="width: 40%; font-size: 55%;"}
-- There is **NO** significant association between how your body felt and hours of sleep that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`) and two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`) previous [*Not shown*].
-- [*Not shown*] There was an association between how your body felt  and hours of sleep one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`), with slightly fewer than expected "Sore, need trainer" and "Fine, getting it done" days with more sleep (>8 hr) one day previous.
-- [*Not shown*] There was an association between how your body felt and hours of sleep seven days previous (p=`r formatC(chitmp7$p.value,format="f",digits=3)`). There were somewhat more than expected "Sore, need trainer" and "Fine, getting it done" days with more sleep and more than expected "Amazing, could PR" days with less sleep seven days previous.
-:::
-
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-ggplot(data=tmp,mapping=aes(x=fsleep,y=fbody_feel,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=feat_habitsZ,y=fstress_lvlZ,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(tmp$fbody_feel,width=12)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvlZ),width=12)) +  
   scale_x_discrete(labels=tmp1$lbl,position="top") +  
   theme_journey_tile +  
-  labs(caption="% in body feel level for each sleep amount")
+  labs(caption="% in stress level for each eating habit")
+
+chitmp <- chisq.test(xtabs(~feat_habitsZ+fstress_lvlZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~feat_habitsZ1+fstress_lvlZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~feat_habitsZ2+fstress_lvlZ,data=tmpdf))
 ```
 :::
-::::
-
-
-## Workouts and Eating Habits I
-
-:::: {.columns}
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-tmp <- df |>
-  filter(!is.na(feat_habits)) |>
-  group_by(training,feat_habits,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(training) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(str_wrap(training,12),"\n(n=",n," d)"))
-
-ggplot(data=tmp,mapping=aes(x=training,y=feat_habits,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$feat_habits),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in eating habit for each training type")
-```
-:::
-
-```{r}
-tbltmp1 <- xtabs(~training,data=df)
-tbltmp2 <- xtabs(~feat_habits,data=df)
-```
-
 ::: {.column style="width: 40%; font-size: 60%;"}
-- To allow for a chi-square test of association (*next slide*) ...
-  - The "Competition" days were dropped (n=`r tbltmp1[["Competition"]]`) (*can be added back later when more competitions are added*).
-  - The two "Not good, .." levels (n=`r tbltmp2[["Not good, but 3 meals"]]` and `r tbltmp2[["Not good, not 3 meals"]]`) were combined to one "Not good" level. 
-:::
-::::
+- There was no association between eating habits for the day and stress level that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
 
+&nbsp;
 
-## Workouts and Eating Habits II
-
-```{r}
-dftmp <- df |>
-  select(training,feat_habits) |>
-  filter(training!="Competition") |>
-  mutate(training=forcats::fct_drop(training),
-         feat_habits=forcats::fct_other(feat_habits,
-                                        keep=c("3 meals, and balanced",
-                                               "3 meals, but upset"),
-                                        other_level="Not good"),
-         feat_habits=factor(feat_habits,levels=c("Not good",
-                                                 "3 meals, but upset",
-                                                 "3 meals, and balanced")))
-
-tmp <- dftmp |>
-  filter(!is.na(feat_habits)) |>
-  group_by(training,feat_habits,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(training) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(training,"\n(n=",n," d)"))
-
-tbltmp <- xtabs(~feat_habits+training,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
-:::: {.columns}
-::: {.column style="width: 40%; font-size: 60%;"}
-- There is a significant association between training type and eating habits (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
-- It appears that you eat more balanced meals and fewer "not good" meals on your training days, as compared to your rest days.
-:::
-
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-ggplot(data=tmp,mapping=aes(x=training,y=feat_habits,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$feat_habits),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in eating habit for each training type")
-```
-:::
-::::
-
-
-## Eating Habits and How Body Feels I
-
-:::: {.columns}
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-dftmp <- df |>
-  select(feat_habits,fbody_feel) |>
-  filter(!is.na(feat_habits),!is.na(fbody_feel)) |>
-  mutate(feat_habits=fct_drop(feat_habits),
-         fbody_feel=fct_drop(fbody_feel))
-
-tmp <- dftmp |>
-  group_by(feat_habits,fbody_feel,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(feat_habits) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(str_wrap(feat_habits,12),"\n(n=",n," d)"))
-
-ggplot(data=tmp,mapping=aes(x=feat_habits,y=fbody_feel,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feel),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in body feels level for each eating habit")
-```
-:::
-
-```{r}
-tbltmp <- xtabs(~feat_habits+fbody_feel,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
-::: {.column style="width: 40%; font-size: 60%;"}
-- To allow for a chi-square test of association, unused levels of "body feels" and "eating habits" were dropped as on previous slides
-- There was **NO** significant association between eating habits for the day and how your body felt that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
-:::
-::::
-
-
-## Eating Habits and How Body Feels II
-
-:::: {.columns}
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-dftmp <- df |>
-  select(feat_habits1,fbody_feel) |>
-  filter(!is.na(feat_habits1),!is.na(fbody_feel)) |>
-  mutate(feat_habits1=fct_drop(feat_habits1),
-         fbody_feel=fct_drop(fbody_feel))
-
-tmp <- dftmp |>
-  group_by(feat_habits1,fbody_feel,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(feat_habits1) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(str_wrap(feat_habits1,12),"\n(n=",n," d)"))
-
-ggplot(data=tmp,mapping=aes(x=feat_habits1,y=fbody_feel,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feel),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in body feels level for each eating habit")
-```
-:::
-
-```{r}
-tbltmp <- xtabs(~feat_habits1+fbody_feel,data=dftmp)
-chitmp1 <- chisq.test(tbltmp)
-```
-
-```{r}
-dftmp <- df |>
-  select(feat_habits2,fbody_feel) |>
-  filter(!is.na(feat_habits2),!is.na(fbody_feel)) |>
-  mutate(feat_habits2=fct_drop(feat_habits2),
-         fbody_feel=fct_drop(fbody_feel))
-tbltmp <- xtabs(~feat_habits2+fbody_feel,data=dftmp)
-chitmp2 <- chisq.test(tbltmp)
-
-dftmp <- df |>
-  select(feat_habits7,fbody_feel) |>
-  filter(!is.na(feat_habits7),!is.na(fbody_feel)) |>
-  mutate(feat_habits7=fct_drop(feat_habits7),
-         fbody_feel=fct_drop(fbody_feel))
-tbltmp <- xtabs(~feat_habits7+fbody_feel,data=dftmp)
-chitmp7 <- chisq.test(tbltmp)
-
-```
-
-::: {.column style="width: 40%; font-size: 60%;"}
-- There was **NO** significant association between eating habits from previous day and how your body felt -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`, shown), two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`, *not shown*), and seven days previous (p=`r formatC(chitmp7$p.value,format="f",digits=3)`, *not shown*).
+- There was no association between eating habits from previous days and stress level -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table not shown*) or two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
 :::
 ::::
 
 
 
-## Eating Habits and Sleep I
+## Electrolytes and Stress Level
+
+<p style="font-size: 75%;">*Question: Is your stress level lower if you drink electrolytes that day?*</p>
 
 :::: {.columns}
 ::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
-dftmp <- df |>
-  select(feat_habits,fsleep) |>
-  filter(!is.na(feat_habits),!is.na(fsleep)) |>
-  mutate(feat_habits=fct_drop(feat_habits),
-         fsleep=fct_drop(fsleep))
+tmpdf <- df |>
+  mutate(electrolytesb1=lag(electrolytesb,n=1),
+         electrolytesb2=lag(electrolytesb,n=2))
 
-tmp <- dftmp |>
-  group_by(feat_habits,fsleep,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(feat_habits) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(str_wrap(feat_habits,12),"\n(n=",n," d)"))
-
-ggplot(data=tmp,mapping=aes(x=feat_habits,y=fsleep,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fsleep),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in sleep amounts for each eating habit")
-```
-:::
-
-```{r}
-tbltmp <- xtabs(~feat_habits+fsleep,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
-::: {.column style="width: 40%; font-size: 60%;"}
-- To allow for a chi-square test of association, unused levels of "eating habits" were dropped and sleep amounts were combined as on previous slides
-- There **was** a significant association between eating habits for the day and how much you slept that night (p=`r formatC(chitmp$p.value,format="f",digits=3)`). There was a tendency to sleep less when you ate worse (and sleep more when you ate better).
-:::
-::::
-
-
-## Eating Habits and Sleep II
-
-:::: {.columns}
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-dftmp <- df |>
-  select(feat_habits1,fsleep) |>
-  filter(!is.na(feat_habits1),!is.na(fsleep)) |>
-  mutate(feat_habits1=fct_drop(feat_habits1),
-         fsleep=fct_drop(fsleep))
-
-tmp <- dftmp |>
-  group_by(feat_habits1,fsleep,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(feat_habits1) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(str_wrap(feat_habits1,12),"\n(n=",n," d)"))
-
-ggplot(data=tmp,mapping=aes(x=feat_habits1,y=fsleep,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fsleep),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in sleep amounts for each eating habit")
-```
-:::
-
-```{r}
-tbltmp <- xtabs(~feat_habits1+fsleep,data=dftmp)
-chitmp1 <- chisq.test(tbltmp)
-```
-
-```{r}
-dftmp <- df |>
-  select(feat_habits2,fsleep) |>
-  filter(!is.na(feat_habits2),!is.na(fsleep)) |>
-  mutate(feat_habits2=fct_drop(feat_habits2),
-         fsleep=fct_drop(fsleep))
-tbltmp <- xtabs(~feat_habits2+fsleep,data=dftmp)
-chitmp2 <- chisq.test(tbltmp)
-
-dftmp <- df |>
-  select(feat_habits7,fsleep) |>
-  filter(!is.na(feat_habits7),!is.na(fsleep)) |>
-  mutate(feat_habits7=fct_drop(feat_habits7),
-         fsleep=fct_drop(fsleep))
-tbltmp <- xtabs(~feat_habits7+fsleep,data=dftmp)
-chitmp7 <- chisq.test(tbltmp)
-```
-
-::: {.column style="width: 40%; font-size: 60%;"}
-- There was **NO** significant association between eating habits from previous days and how much you slept that day -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`, shown), two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`, *not shown*), and seven days previous (p=`r formatC(chitmp7$p.value,format="f",digits=3)`, *not shown*).
-- There was slight evidence (but not significant) that you slept more on the day following when you did not eat well (*shown*).
-:::
-::::
-
-
-
-## Electrolytes and How Body Feels I
-
-:::: {.columns}
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-dftmp <- df |>
-  select(electrolytesb,fbody_feel) |>
-  filter(!is.na(electrolytesb),!is.na(fbody_feel)) |>
-  mutate(electrolytesb=fct_drop(electrolytesb),
-         fbody_feel=fct_drop(fbody_feel))
-
-tmp <- dftmp |>
-  group_by(electrolytesb,fbody_feel,.drop=FALSE) |>
+tmp <- tmpdf |>
+  group_by(electrolytesb,fstress_lvlZ,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
@@ -891,109 +1346,46 @@ tmp1 <- tmp |>
   summarize(n=sum(freq)) |>
   mutate(lbl=paste0(str_wrap(electrolytesb,12),"\n(n=",n," d)"))
 
-ggplot(data=tmp,mapping=aes(x=electrolytesb,y=fbody_feel,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=electrolytesb,y=fstress_lvlZ,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feel),width=12)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvlZ),width=12)) +  
   scale_x_discrete(labels=tmp1$lbl,position="top") +  
   theme_journey_tile +  
-  labs(caption="% in body feels level for each electrolytes level")
+  labs(caption="% in stress level for each electrolytes level")
+
+chitmp <- chisq.test(xtabs(~electrolytesb+fstress_lvlZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~electrolytesb1+fstress_lvlZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~electrolytesb2+fstress_lvlZ,data=tmpdf))
 ```
 :::
-
-```{r}
-tbltmp <- xtabs(~electrolytesb+fbody_feel,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
 ::: {.column style="width: 40%; font-size: 60%;"}
-- To allow for a chi-square test of association, unused levels of "body feels" were dropped and electrolyte levels were pooled into "yes" (had electrolytes) or "no"
-- There was **NO** significant association between having electrolytes for the day and how your body felt that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
-:::
-::::
+- There was no association between having electrolytes for the day and your stress level that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
 
+&nbsp;
 
-## Electrolytes and How Body Feels II
-
-:::: {.columns}
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-dftmp <- df |>
-  select(electrolytesb1,fbody_feel) |>
-  filter(!is.na(electrolytesb1),!is.na(fbody_feel)) |>
-  mutate(electrolytesb1=fct_drop(electrolytesb1),
-         fbody_feel=fct_drop(fbody_feel))
-
-tmp <- dftmp |>
-  group_by(electrolytesb1,fbody_feel,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(electrolytesb1) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(str_wrap(electrolytesb1,12),"\n(n=",n," d)"))
-
-ggplot(data=tmp,mapping=aes(x=electrolytesb1,y=fbody_feel,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feel),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in body feels level for each electrolyte level")
-```
-:::
-
-```{r}
-tbltmp <- xtabs(~electrolytesb1+fbody_feel,data=dftmp)
-chitmp1 <- chisq.test(tbltmp)
-```
-
-```{r}
-dftmp <- df |>
-  select(electrolytesb2,fbody_feel) |>
-  filter(!is.na(electrolytesb2),!is.na(fbody_feel)) |>
-  mutate(electrolytesb2=fct_drop(electrolytesb2),
-         fbody_feel=fct_drop(fbody_feel))
-tbltmp <- xtabs(~electrolytesb2+fbody_feel,data=dftmp)
-chitmp2 <- chisq.test(tbltmp)
-
-dftmp <- df |>
-  select(electrolytesb7,fbody_feel) |>
-  filter(!is.na(electrolytesb7),!is.na(fbody_feel)) |>
-  mutate(electrolytesb7=fct_drop(electrolytesb7),
-         fbody_feel=fct_drop(fbody_feel))
-tbltmp <- xtabs(~electrolytesb7+fbody_feel,data=dftmp)
-chitmp7 <- chisq.test(tbltmp)
-
-```
-
-::: {.column style="width: 40%; font-size: 60%;"}
-- There was **NO** significant association between having electrolytes on previous days and how your body felt -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`, shown), two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`, *not shown*), and seven days previous (p=`r formatC(chitmp7$p.value,format="f",digits=3)`, *not shown*).
+- There was no association between having electrolytes on previous days and your stress level -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table not shown*) or  two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
 :::
 ::::
 
 
 
-## Alcohol and How Body Feels I
+## Alcohol and Stress Level I
+
+<p style="font-size: 75%;">*Question: Is your stress level different if you drink alcohol that day?*</p>
 
 :::: {.columns}
 ::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
-dftmp <- df |>
-  select(alcoholb,fbody_feel) |>
-  filter(!is.na(alcoholb),!is.na(fbody_feel)) |>
-  mutate(alcoholb=fct_drop(alcoholb),
-         fbody_feel=fct_drop(fbody_feel))
+tmpdf <- df |>
+  mutate(alcoholb1=lag(alcoholb,n=1),
+         alcoholb2=lag(alcoholb,n=2))
 
-tmp <- dftmp |>
-  group_by(alcoholb,fbody_feel,.drop=FALSE) |>
+tmp <- tmpdf |>
+  group_by(alcoholb,fstress_lvlZ,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
@@ -1004,43 +1396,38 @@ tmp1 <- tmp |>
   summarize(n=sum(freq)) |>
   mutate(lbl=paste0(str_wrap(alcoholb,12),"\n(n=",n," d)"))
 
-ggplot(data=tmp,mapping=aes(x=alcoholb,y=fbody_feel,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=alcoholb,y=fstress_lvlZ,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feel),width=12)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvlZ),width=12)) +  
   scale_x_discrete(labels=tmp1$lbl,position="top") +  
   theme_journey_tile +  
-  labs(caption="% in body feels level for each alcohol level")
+  labs(caption="% in stress level for each alcohol level")
+
+chitmp <- chisq.test(xtabs(~alcoholb+fstress_lvlZ,data=tmpdf))
+# exploring time lags
+chitmp1 <- chisq.test(xtabs(~alcoholb1+fstress_lvlZ,data=tmpdf))
+chitmp2 <- chisq.test(xtabs(~alcoholb2+fstress_lvlZ,data=tmpdf))
 ```
 :::
-
-```{r}
-tbltmp <- xtabs(~alcoholb+fbody_feel,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
 ::: {.column style="width: 40%; font-size: 60%;"}
-- To allow for a chi-square test of association, unused levels of "body feels" were dropped and alcohol levels were pooled into "yes" (had electrolytes) or "no"
-- There was **NO** significant association between consuming alcohol for the day and how your body felt that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
+- There was no association between having alcohol for the day and your stress level that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
 :::
 ::::
 
 
-## Alcohol and How Body Feels II
+## Alcohol and Stress Level II
+
+<p style="font-size: 75%;">*Question: Is your stress level different if you drink alcohol on previous days?*</p>
 
 :::: {.columns}
 ::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
-dftmp <- df |>
-  select(alcoholb1,fbody_feel) |>
-  filter(!is.na(alcoholb1),!is.na(fbody_feel)) |>
-  mutate(alcoholb1=fct_drop(alcoholb1),
-         fbody_feel=fct_drop(fbody_feel))
-
-tmp <- dftmp |>
-  group_by(alcoholb1,fbody_feel,.drop=FALSE) |>
+tmp <- tmpdf |>
+  filter(!is.na(alcoholb1)) |>
+  group_by(alcoholb1,fstress_lvlZ,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
@@ -1051,206 +1438,37 @@ tmp1 <- tmp |>
   summarize(n=sum(freq)) |>
   mutate(lbl=paste0(str_wrap(alcoholb1,12),"\n(n=",n," d)"))
 
-ggplot(data=tmp,mapping=aes(x=alcoholb1,y=fbody_feel,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=alcoholb1,y=fstress_lvlZ,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fbody_feel),width=12)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvlZ),width=12)) +  
   scale_x_discrete(labels=tmp1$lbl,position="top") +  
   theme_journey_tile +  
-  labs(caption="% in body feels level for each alcohol level")
+  labs(caption="% in stress level for each alcohol level")
 ```
 :::
-
-```{r}
-tbltmp <- xtabs(~alcoholb1+fbody_feel,data=dftmp)
-chitmp1 <- chisq.test(tbltmp)
-```
-
-```{r}
-dftmp <- df |>
-  select(alcoholb2,fbody_feel) |>
-  filter(!is.na(alcoholb2),!is.na(fbody_feel)) |>
-  mutate(alcoholb2=fct_drop(alcoholb2),
-         fbody_feel=fct_drop(fbody_feel))
-tbltmp <- xtabs(~alcoholb2+fbody_feel,data=dftmp)
-chitmp2 <- chisq.test(tbltmp)
-
-dftmp <- df |>
-  select(alcoholb7,fbody_feel) |>
-  filter(!is.na(alcoholb7),!is.na(fbody_feel)) |>
-  mutate(alcoholb7=fct_drop(alcoholb7),
-         fbody_feel=fct_drop(fbody_feel))
-tbltmp <- xtabs(~alcoholb7+fbody_feel,data=dftmp)
-chitmp7 <- chisq.test(tbltmp)
-
-```
-
 ::: {.column style="width: 40%; font-size: 60%;"}
-- There was **NO** significant association between consuming alcohol on previous days and how your body felt -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`, shown), two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`, *not shown*), and seven days previous (p=`r formatC(chitmp7$p.value,format="f",digits=3)`, *not shown*).
+- There was no association between having alcohol on previous days and how your body felt -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`; *table shown*) or two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`; *table not shown*).
+- However, your stress level was somewhat lower/better on days following having consumed alcohol.
 :::
 ::::
 
 
 
+## Period and Stress Level
 
-## Alcohol and Stress I
-
-:::: {.columns}
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-dftmp <- df |>
-  select(alcoholb,fstress_lvl) |>
-  filter(!is.na(alcoholb),!is.na(fstress_lvl)) |>
-  mutate(alcoholb=fct_drop(alcoholb),
-         fstress_lvl=forcats::fct_other(fstress_lvl,
-                                        keep=c("Happy, under control",
-                                               "Great day, some spots"),
-                                        other_level="Tough"),
-         fstress_lvl=factor(fstress_lvl,levels=c("Tough",
-                                                 "Great day, some spots",
-                                                 "Happy, under control")),
-         fstress_lvl=fct_drop(fstress_lvl))
-
-tmp <- dftmp |>
-  group_by(alcoholb,fstress_lvl,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(alcoholb) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(str_wrap(alcoholb,12),"\n(n=",n," d)"))
-
-ggplot(data=tmp,mapping=aes(x=alcoholb,y=fstress_lvl,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvl),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in body feels level for each alcohol level")
-```
-:::
-
-```{r}
-tbltmp <- xtabs(~alcoholb+fstress_lvl,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
-::: {.column style="width: 40%; font-size: 60%;"}
-- To allow for a chi-square test of association, a singular "tough" stress level was created (as preciously) and alcohol levels were pooled into "yes" (had electrolytes) or "no"
-- There was **NO** significant association between consuming alcohol for the day and stress levels that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
-:::
-::::
-
-
-## Alcohol and Stress II
+<p style="font-size: 75%;">*Question: Is your stress level worse when you are on your period?*</p>
 
 :::: {.columns}
 ::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
-dftmp <- df |>
-  select(alcoholb1,fstress_lvl) |>
-  filter(!is.na(alcoholb1),!is.na(fstress_lvl)) |>
-  mutate(alcoholb1=fct_drop(alcoholb1),
-         fstress_lvl=forcats::fct_other(fstress_lvl,
-                                        keep=c("Happy, under control",
-                                               "Great day, some spots"),
-                                        other_level="Tough"),
-         fstress_lvl=factor(fstress_lvl,levels=c("Tough",
-                                                 "Great day, some spots",
-                                                 "Happy, under control")),
-         fstress_lvl=fct_drop(fstress_lvl))
+tmpdf <- df
 
-tmp <- dftmp |>
-  group_by(alcoholb1,fstress_lvl,.drop=FALSE) |>
-  summarize(freq=n()) |>
-  mutate(perc=freq/sum(freq),
-         perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
-  ungroup()
-
-tmp1 <- tmp |>
-  group_by(alcoholb1) |>
-  summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(str_wrap(alcoholb1,12),"\n(n=",n," d)"))
-
-ggplot(data=tmp,mapping=aes(x=alcoholb1,y=fstress_lvl,fill=perc)) +
-  geom_tile() +  
-  scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
-  geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvl),width=12)) +  
-  scale_x_discrete(labels=tmp1$lbl,position="top") +  
-  theme_journey_tile +  
-  labs(caption="% in body feels level for each alcohol level")
-```
-:::
-
-```{r}
-tbltmp <- xtabs(~alcoholb1+fstress_lvl,data=dftmp)
-chitmp1 <- chisq.test(tbltmp)
-```
-
-```{r}
-dftmp <- df |>
-  select(alcoholb2,fstress_lvl) |>
-  filter(!is.na(alcoholb2),!is.na(fstress_lvl)) |>
-  mutate(alcoholb2=fct_drop(alcoholb2),
-         fstress_lvl=forcats::fct_other(fstress_lvl,
-                                        keep=c("Happy, under control",
-                                               "Great day, some spots"),
-                                        other_level="Tough"),
-         fstress_lvl=factor(fstress_lvl,levels=c("Tough",
-                                                 "Great day, some spots",
-                                                 "Happy, under control")),
-         fstress_lvl=fct_drop(fstress_lvl))
-tbltmp <- xtabs(~alcoholb2+fstress_lvl,data=dftmp)
-chitmp2 <- chisq.test(tbltmp)
-
-dftmp <- df |>
-  select(alcoholb7,fstress_lvl) |>
-  filter(!is.na(alcoholb7),!is.na(fstress_lvl)) |>
-  mutate(alcoholb7=fct_drop(alcoholb7),
-         fstress_lvl=forcats::fct_other(fstress_lvl,
-                                        keep=c("Happy, under control",
-                                               "Great day, some spots"),
-                                        other_level="Tough"),
-         fstress_lvl=factor(fstress_lvl,levels=c("Tough",
-                                                 "Great day, some spots",
-                                                 "Happy, under control")),
-         fstress_lvl=fct_drop(fstress_lvl))
-tbltmp <- xtabs(~alcoholb7+fstress_lvl,data=dftmp)
-chitmp7 <- chisq.test(tbltmp)
-
-```
-
-::: {.column style="width: 40%; font-size: 60%;"}
-- There was **NO** significant association between consuming alcohol on previous days and stress level -- one day previous (p=`r formatC(chitmp1$p.value,format="f",digits=3)`, shown), two days previous (p=`r formatC(chitmp2$p.value,format="f",digits=3)`, *not shown*), and seven days previous (p=`r formatC(chitmp7$p.value,format="f",digits=3)`, *not shown*).
-- However, there is weak evidence for more "Happy, under control" days when having consumed alcohol the previous day (*shown*)
-:::
-::::
-
-
-
-
-## Period and Sleep
-
-:::: {.columns}
-::: {.column width="60%"}
-```{r}
-#| fig-width: 5.5
-dftmp <- df |>
-  select(period,fsleep) |>
-  filter(!is.na(period),!is.na(fsleep)) |>
-  mutate(period=fct_drop(period),
-         fsleep=fct_drop(fsleep))
-
-tmp <- dftmp |>
-  group_by(period,fsleep,.drop=FALSE) |>
+tmp <- tmpdf |>
+  filter(!is.na(period)) |>
+  group_by(period,fstress_lvlZ,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
@@ -1261,78 +1479,64 @@ tmp1 <- tmp |>
   summarize(n=sum(freq)) |>
   mutate(lbl=paste0(str_wrap(period,12),"\n(n=",n," d)"))
 
-ggplot(data=tmp,mapping=aes(x=period,y=fsleep,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=period,y=fstress_lvlZ,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fsleep),width=12)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvlZ),width=12)) +  
   scale_x_discrete(labels=tmp1$lbl,position="top") +  
   theme_journey_tile +  
-  labs(caption="% in sleep amounts for each eating habit")
+  labs(caption="% in stress level for each period level")
+
+chitmp <- chisq.test(xtabs(~period+fstress_lvlZ,data=tmpdf))
 ```
 :::
-
-```{r}
-tbltmp <- xtabs(~period+fsleep,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
 ::: {.column style="width: 40%; font-size: 60%;"}
-- To allow for a chi-square test of association sleep amounts were combined as on previous slides
-- There was **NO** a significant association between being on your period and how much you slept that night (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
+- There was no association between being on your period for the day and your stress level that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`; *table shown*).
+- However, there is some indication that your stress level is slightly "worse" when on your period.
 :::
 ::::
 
 
-## Period and Stress
+
+# Other Analyses
+## Workout and Eating Habits
+<p style="font-size: 75%;">*Question: Do your eating habits differ based on whether you workout or not?*</p>
 
 :::: {.columns}
 ::: {.column width="60%"}
 ```{r}
 #| fig-width: 5.5
-dftmp <- df |>
-  select(period,fstress_lvl) |>
-  filter(!is.na(period),!is.na(fstress_lvl)) |>
-  mutate(period=fct_drop(period),
-         fstress_lvl=forcats::fct_other(fstress_lvl,
-                                        keep=c("Happy, under control",
-                                               "Great day, some spots"),
-                                        other_level="Tough"),
-         fstress_lvl=factor(fstress_lvl,levels=c("Tough",
-                                                 "Great day, some spots",
-                                                 "Happy, under control")),
-         fstress_lvl=fct_drop(fstress_lvl))
+tmpdf <- df |>
+  filter(training!="Competition") |>
+  mutate(training=forcats::fct_drop(training))
 
-tmp <- dftmp |>
-  group_by(period,fstress_lvl,.drop=FALSE) |>
+tmp <- tmpdf |>
+  group_by(workoutday,feat_habitsZ,.drop=FALSE) |>
   summarize(freq=n()) |>
   mutate(perc=freq/sum(freq),
          perc_lbl=paste0(formatC(perc*100,format="f",digits=0),"%")) |>
   ungroup()
 
 tmp1 <- tmp |>
-  group_by(period) |>
+  group_by(workoutday) |>
   summarize(n=sum(freq)) |>
-  mutate(lbl=paste0(str_wrap(period,12),"\n(n=",n," d)"))
+  mutate(lbl=paste0(str_wrap(workoutday,12),"\n(n=",n," d)"))
 
-ggplot(data=tmp,mapping=aes(x=period,y=fstress_lvl,fill=perc)) +
+ggplot(data=tmp,mapping=aes(x=workoutday,y=feat_habitsZ,fill=perc)) +
   geom_tile() +  
   scale_fill_gradient2(low=fill_tile["low"],high=fill_tile["high"]) +  
   geom_text(aes(label=perc_lbl)) +  
-  scale_y_discrete(labels=str_wrap(levels(tmp$fstress_lvl),width=12)) +  
+  scale_y_discrete(labels=str_wrap(levels(tmp$feat_habitsZ),width=12)) +  
   scale_x_discrete(labels=tmp1$lbl,position="top") +  
   theme_journey_tile +  
-  labs(caption="% in body feels level for each period level")
+  labs(caption="% in eating habits for each workout type")
+
+chitmp <- chisq.test(xtabs(~workoutday+feat_habitsZ,data=tmpdf))
 ```
 :::
-
-```{r}
-tbltmp <- xtabs(~period+fstress_lvl,data=dftmp)
-chitmp <- chisq.test(tbltmp)
-```
-
 ::: {.column style="width: 40%; font-size: 60%;"}
-- To allow for a chi-square test of association, a singular "tough" stress level was created (as preciously)
-- There was **NO** significant association between being on your period and stress level that day (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
+- There is an association between workout days and eating habits (p=`r formatC(chitmp$p.value,format="f",digits=3)`).
+- It appears that you eat more balanced meals and fewer "not good" meals on your training days, as compared to your rest days.
 :::
 ::::

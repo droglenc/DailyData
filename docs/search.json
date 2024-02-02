@@ -4,14 +4,14 @@
     "href": "Results_2324.html#sleep-daily-series",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Sleep Daily Series",
-    "text": "Sleep Daily Series"
+    "text": "Sleep Daily Series\n\n\nSleep is number of overnight hours to waking up that day’s morning."
   },
   {
     "objectID": "Results_2324.html#sleep-summary",
     "href": "Results_2324.html#sleep-summary",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Sleep Summary",
-    "text": "Sleep Summary"
+    "text": "Sleep Summary\n\n\n\n\n\n\n\n\n\nFor statistical analyses (next) the few days with less than 6 (n=2) or more than 9 (n=6) hours of sleep were combined with 6 and 9 hours to form “≤6 h” and “≥9 h” categories."
   },
   {
     "objectID": "index.html",
@@ -32,7 +32,7 @@
     "href": "Results_2324.html#body-feels-summary",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Body Feels Summary",
-    "text": "Body Feels Summary"
+    "text": "Body Feels Summary\n\n\n\n\n\n\n\n\n\nFor statistical analyses (later) the “Sick/Injured/Can’t” level with few days (n=0) was combined with the “Sore, need trainer” level to form a new “Need trainer or Can’t” level."
   },
   {
     "objectID": "Results_2324.html#stress-levels-daily-series",
@@ -46,7 +46,7 @@
     "href": "Results_2324.html#stress-levels-summary",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Stress Levels Summary",
-    "text": "Stress Levels Summary"
+    "text": "Stress Levels Summary\n\n\n\n\n\n\n\n\n\nFor statistical analyses (later) the “Tears, hanging on” (n=4), “Tough, but getting through” (n=7), and “Tough, but things done” (n=8) levels were combined into a “Tough” level."
   },
   {
     "objectID": "Results_2324.html#stress-sources",
@@ -60,7 +60,7 @@
     "href": "Results_2324.html#sleep-and-stress-level",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Sleep and Stress Level",
-    "text": "Sleep and Stress Level"
+    "text": "Sleep and Stress Level\n\nQuestion: Is your level of stress lower with more sleep the night (or two nights) before?\n\n\n\n\n\n\n\n\n\n\nThere was no association between stress level and hours of sleep the previous night (p=0.131; table shown).\nHowever, there is some evidence that you have more “tough” days following lower hours of sleep.\n\n \n\nThere was no association between stress level and hours of sleep from the previous day (p=0.707; table not shown)."
   },
   {
     "objectID": "Results_2324.html#number-of-workout-and-training-days",
@@ -81,7 +81,7 @@
     "href": "Results_2324.html#eating-habits-summary",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Eating Habits Summary",
-    "text": "Eating Habits Summary"
+    "text": "Eating Habits Summary\n\n\n\n\n\n\n\n\n\nFor statistical analyses (later) the few “Not good, not 3 meals” days (n=0) were combined with “Not good, but 3 meals” days to form a “Not good” level."
   },
   {
     "objectID": "Results_2324.html#workouts-and-eating-habits",
@@ -109,7 +109,7 @@
     "href": "Results_2324.html#electrolytes-summary",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Electrolytes Summary",
-    "text": "Electrolytes Summary"
+    "text": "Electrolytes Summary\n\n\n\n\n\n\n\n\n\nFor statistical analyses (later) the electrolytes variable was simplified to “No” (no electrolytes that day) and “Yes” (electrolytes that day in some way)."
   },
   {
     "objectID": "Results_2324.html#alcohol-daily-series",
@@ -123,7 +123,7 @@
     "href": "Results_2324.html#alcohol-summary",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Alcohol Summary",
-    "text": "Alcohol Summary"
+    "text": "Alcohol Summary\n\n\n\n\n\n\n\n\n\nFor statistical analyses (later) the alcohol variable was simplified to “No” (no alcohol that day) and “Yes” (some alcohol that day)."
   },
   {
     "objectID": "Results_2324.html#period-series",
@@ -137,7 +137,7 @@
     "href": "Results_2324.html#sleep-and-stress-level-i",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Sleep and Stress Level I",
-    "text": "Sleep and Stress Level I\n\n\n\n\n\n\n\n\n\nHours of sleep is number of overnight hours from waking up that morning (i.e., no lag).\nTo allow for a chi-square test of association (next slide) …\n\nThe few days with less than 6 (n=2) or more than 9 (n=6) hours of sleep were combined with 6 and 9 hours to form “≤6 h” and “≥9 h” categories.\nThe few days with “Tough, but things done” (n=8), “Tough, but getting through” (n=7), and “Tears, hanging on” (n=4) levels were combined into one level called “Tough.”"
+    "text": "Sleep and Stress Level I\n\n\n\n\n\n\n\n\n\nThere was no association between stress level and hours of sleep the previous night (i.e., one day lag) (p=0.707; table shown).\nHowever, there is some evidence that you have more “Happy, under control” days with more sleep.\n\n \n\nThere was no association between stress level and hours of sleep two days previous (p=0.057; table not shown)."
   },
   {
     "objectID": "Results_2324.html#sleep-and-stress-level-ii",
@@ -165,14 +165,14 @@
     "href": "Results_2324.html#sleep-and-body-feels-i",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Sleep and Body Feels I",
-    "text": "Sleep and Body Feels I\n\n\n\n\n\n\n\n\n\nHours of sleep is number of overnight hours from waking up that morning (i.e., no lag).\nTo allow for a chi-square test of association (next slide) …\n\nThe few days with less than 6 (n=2) or more than 9 (n=6) hours of sleep were combined with 6 and 9 hours to form “≤6 h” and “≥9 h” categories.\nThe “Sick/Injured/Can’t” level was dropped (n=0)."
+    "text": "Sleep and Body Feels I\n\nQuestion: Does your body feel better when you get more sleep?\n\n\n\n\n\n\n\n\n\n\nThere was no association between how your body felt and hours of sleep that day (p=0.225; table shown)."
   },
   {
     "objectID": "Results_2324.html#sleep-and-body-feels-ii",
     "href": "Results_2324.html#sleep-and-body-feels-ii",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Sleep and Body Feels II",
-    "text": "Sleep and Body Feels II\n\n\n\nThere is NO significant association between how your body felt and hours of sleep that day (p=0.225) and two days previous (p=0.963) previous [Not shown].\n[Not shown] There was an association between how your body felt and hours of sleep one day previous (p=0.023), with slightly fewer than expected “Sore, need trainer” and “Fine, getting it done” days with more sleep (&gt;8 hr) one day previous.\n[Not shown] There was an association between how your body felt and hours of sleep seven days previous (p=0.038). There were somewhat more than expected “Sore, need trainer” and “Fine, getting it done” days with more sleep and more than expected “Amazing, could PR” days with less sleep seven days previous."
+    "text": "Sleep and Body Feels II\n\nQuestion: Does your body feel better when you get more sleep on previous days?\n\n\n\n\n\n\n\n\n\n\nThere was an association between how your body felt and hours of sleep one day previous (p=0.023; table shown).\nThere is evidence that you have slightly fewer “Need trainer or Can’t” and “Fine, getting it done” days with more sleep (&gt;9 hr) one day previous.\n\n \n\nThere is no association between how your body felt and hours of sleep two days previous (p=0.963; table not shown)."
   },
   {
     "objectID": "Results_2324.html#period-daily-series",
@@ -186,7 +186,7 @@
     "href": "Results_2324.html#eating-habits-and-how-body-feels-i",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Eating Habits and How Body Feels I",
-    "text": "Eating Habits and How Body Feels I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association, unused levels of “body feels” and “eating habits” were dropped as on previous slides\nThere was NO significant association between eating habits for the day and how your body felt that day (p=0.664)."
+    "text": "Eating Habits and How Body Feels I\n\n\n\n\n\n\n\n\n\nThere was no association between eating habits for the day and how your body felt that day (p=0.664).\n\n \n\nThere was no association between eating habits from previous days and how your body felt – one day previous (p=0.561, table not shown) or two days previous (p=0.693, table not shown)."
   },
   {
     "objectID": "Results_2324.html#eating-habits-and-how-body-feels-ii",
@@ -235,14 +235,14 @@
     "href": "Results_2324.html#alcohol-and-how-body-feels-i",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Alcohol and How Body Feels I",
-    "text": "Alcohol and How Body Feels I\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association, unused levels of “body feels” were dropped and alcohol levels were pooled into “yes” (had electrolytes) or “no”\nThere was NO significant association between consuming alcohol for the day and how your body felt that day (p=0.304)."
+    "text": "Alcohol and How Body Feels I\n\nQuestion: Does your body feel better if you drink alcohol that day?\n\n\n\n\n\n\n\n\n\n\nThere was no association between having alcohol for the day and how your body felt that day (p=0.304; table shown)."
   },
   {
     "objectID": "Results_2324.html#alcohol-and-how-body-feels-ii",
     "href": "Results_2324.html#alcohol-and-how-body-feels-ii",
     "title": "Journey’s Daily Data 2023-24",
     "section": "Alcohol and How Body Feels II",
-    "text": "Alcohol and How Body Feels II\n\n\n\n\n\n\n\n\n\nThere was NO significant association between consuming alcohol on previous days and how your body felt – one day previous (p=0.593, shown), two days previous (p=0.666, not shown), and seven days previous (p=0.629, not shown)."
+    "text": "Alcohol and How Body Feels II\n\nQuestion: Does your body feel better if you drink alcohol on previous days?\n\n\n\n\n\n\n\n\n\n\nThere was no association between having alcohol on previous days and how your body felt – one day previous (p=0.593; table shown) or two days previous (p=0.666; table not shown)."
   },
   {
     "objectID": "Results_2324.html#alcohol-and-stress-i",
@@ -271,5 +271,243 @@
     "title": "Journey’s Daily Data 2023-24",
     "section": "Period and Stress",
     "text": "Period and Stress\n\n\n\n\n\n\n\n\n\nTo allow for a chi-square test of association, a singular “tough” stress level was created (as preciously)\nThere was NO significant association between being on your period and stress level that day (p=0.445)."
+  },
+  {
+    "objectID": "Results_2324.html#explanation-of-relationships-graphs",
+    "href": "Results_2324.html#explanation-of-relationships-graphs",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Explanation of Relationships Graphs",
+    "text": "Explanation of Relationships Graphs\n\n\n\nThis is an example of how sleep amount may impact how your body feels.\n\nResponse/Dependent variable (e.g., how your body feels) is in rows.\nExplanatory/Independent variable (e.g., sleep amount) is in columns.\n\nPercentages are computed by column.\n\nThus, each column sums to 100% (within rounding).\nFor example, upper-left cell says that on 29% of the days you slept for 6 h or less your body felt amazing like you could PR.\n\nColors get darker as the percentage increases.\nGenerally compare columns to each other (e.g., to see how your body feels may differ among amounts of sleep)."
+  },
+  {
+    "objectID": "Results_2324.html#explanation-of-relationships-tables-i",
+    "href": "Results_2324.html#explanation-of-relationships-tables-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Explanation of Relationships Tables I",
+    "text": "Explanation of Relationships Tables I\n\n\n\nThis is an example of how sleep amount may impact how your body feels.\n\nResponse/Dependent variable (e.g., how your body feels) is in rows.\nExplanatory/Independent variable (e.g., sleep amount) is in columns.\n\nPercentages are computed by column.\n\nThus, each column sums to 100% (within rounding).\nFor example, upper-left cell says that on 29% of the days you slept for 6 h or less your body felt amazing like you could PR.\n\nColors get darker as the percentage increases.\nGenerally compare columns to each other (e.g., to see if how your body feels differs among amounts of sleep)."
+  },
+  {
+    "objectID": "Results_2324.html#explanation-of-relationships-tables-ii",
+    "href": "Results_2324.html#explanation-of-relationships-tables-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Explanation of Relationships Tables II",
+    "text": "Explanation of Relationships Tables II\n\n\n\nA chi-square test tests if there is an association between the response/dependent and explanatory/independent variables.\nAlternatively, think of it as testing if the percentages are statistically equal across columns (e.g., is the percentage of days in the body feels levels for ≤ 6h the same as for 7 h and 8 h and ≥ 9 h?).\n“Small” p-values (usually &lt; 0.05) mean that there IS an association, the percentages differ across the columns, and the explanatory/independent variable may have an effect on the response/dependent variable.\n\nNote that small p-values are not common with small sample sizes in each cell (i.e., with either few days, many cells in the table, or both)."
+  },
+  {
+    "objectID": "Results_2324.html#stress-and-sleep",
+    "href": "Results_2324.html#stress-and-sleep",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Stress and Sleep",
+    "text": "Stress and Sleep\n\nQuestion: Do you get less sleep after days with more stress?\n\n\n\n\n\n\n\n\n\n\nThere was no association between hours of sleep that night after that day’s stress level (p=0.616; table shown).\n\n \n\nNote that the three “worst” stress levels were combined to one level called “Tough” as will be described here."
+  },
+  {
+    "objectID": "Results_2324.html#stress-daily-series",
+    "href": "Results_2324.html#stress-daily-series",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Stress Daily Series",
+    "text": "Stress Daily Series"
+  },
+  {
+    "objectID": "Results_2324.html#stress-summary",
+    "href": "Results_2324.html#stress-summary",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Stress Summary",
+    "text": "Stress Summary\n\n\n\n\n\n\n\n\n\nFor statistical analyses (later) the “Tears, hanging on” (n=4), “Tough, but getting through” (n=7), and “Tough, but things done” (n=8) levels were combined into a “Tough” level."
+  },
+  {
+    "objectID": "Results_2324.html#alcohol-and-sleep",
+    "href": "Results_2324.html#alcohol-and-sleep",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Alcohol and Sleep",
+    "text": "Alcohol and Sleep\n\nQuestion: Do you get less sleep when you have consumed alcohol that day?\n\n\n\n\n\n\n\n\n\n\nThere was no association between hours of sleep that night after the day where you consumed alcohol or not (p=0.716; table shown)."
+  },
+  {
+    "objectID": "Results_2324.html#workout-type-and-sleep",
+    "href": "Results_2324.html#workout-type-and-sleep",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Workout Type and Sleep",
+    "text": "Workout Type and Sleep\n\nQuestion: Do you get more sleep when you do not have a workout that day?\n\n\n\n\n\n\n\n\n\n\nThere was an association between hours of sleep that night prior to a workout day (p=0.037; table shown).\nThere is evidence that you get more sleep prior to workout days."
+  },
+  {
+    "objectID": "Results_2324.html#eating-habits-and-how-body-feels",
+    "href": "Results_2324.html#eating-habits-and-how-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Eating Habits and How Body Feels",
+    "text": "Eating Habits and How Body Feels\n\nQuestion: Does your body feel better if you eat better that day (or previous days)?\n\n\n\n\n\n\n\n\n\n\nThere was no association between eating habits for the day and how your body felt that day (p=0.664; table shown).\n\n \n\nThere was no association between eating habits from previous days and how your body felt – one day previous (p=0.561; table not shown) or two days previous (p=0.693; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#electrolytes-and-how-body-feels",
+    "href": "Results_2324.html#electrolytes-and-how-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Electrolytes and How Body Feels",
+    "text": "Electrolytes and How Body Feels\n\nQuestion: Does your body feel better if you drink electrolytes that day?\n\n\n\n\n\n\n\n\n\n\nThere was no association between having electrolytes for the day and how your body felt that day (p=0.469; table shown).\n\n \n\nThere was no association between having electrolytes on previous days and how your body felt – one day previous (p=0.427; table not shown) or two days previous (p=0.060; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#period-and-how-body-feels",
+    "href": "Results_2324.html#period-and-how-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Period and How Body Feels",
+    "text": "Period and How Body Feels\n\nQuestion: Does your body feel worse if you are on your period?\n\n\n\n\n\n\n\n\n\n\nThere was no association between being on your period for the day and how your body felt that day (p=0.066; table shown).\nHowever, there is some indication that your body feels “worse” when on your period."
+  },
+  {
+    "objectID": "Results_2324.html#workout-and-how-body-feels",
+    "href": "Results_2324.html#workout-and-how-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Workout and How Body Feels",
+    "text": "Workout and How Body Feels\n\nQuestion: Does your body feel differently depending on whether you worked out that day or not?\n\n\n\n\n\n\n\n\n\n\nThere was no association between whether you worked out or not and how your body felt that day (p=0.080; table shown).\nHowever, there is some evidence that you felt somewhat better when you did not work out.\n\n \n\nThere was no association between whether you worked out or not on previous days and how your body felt – one day previous (p=0.862; table not shown) or two days previous (p=0.464; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#lifting-and-how-body-feels",
+    "href": "Results_2324.html#lifting-and-how-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Lifting and How Body Feels",
+    "text": "Lifting and How Body Feels\n\nQuestion: Does your body feel differently depending on whether you lifted that day or not?\n\n\n\n\n\n\n\n\n\n\nThere was no association between whether you lifted or not and how your body felt that day (p=0.152; table shown).\n\n \n\nThere was no association between whether youlifted or not on previous days and how your body felt – one day previous (p=0.365; table not shown) or two days previous (p=0.866; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#workout-and-stress-level",
+    "href": "Results_2324.html#workout-and-stress-level",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Workout and Stress Level",
+    "text": "Workout and Stress Level\n\nQuestion: Does your stress level depend on whether you worked out that day or not?\n\n\n\n\n\n\n\n\n\n\nThere was no association between whether you worked out or not and your stress level for that day (p=0.850; table shown).\n\n \n\nThere was no association between whether you worked out or not on previous days and your stress level – one day previous (p=0.660; table not shown) or two days previous (p=0.791; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#lifting-and-how-body-feels-1",
+    "href": "Results_2324.html#lifting-and-how-body-feels-1",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Lifting and How Body Feels",
+    "text": "Lifting and How Body Feels\n\nQuestion: Does your stress level depend on whether you lifted that day or not?\n\n\n\n\n\n\n\n\n\n\nThere was no association between whether you lifted or not and your stress level that day (p=0.716; table shown).\n\n \n\nThere was no association between whether you lifted or not on previous days and your stress level – one day previous (p=0.165; table not shown) or two days previous (p=0.384; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#eating-habits-and-stress-level",
+    "href": "Results_2324.html#eating-habits-and-stress-level",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Eating Habits and Stress Level",
+    "text": "Eating Habits and Stress Level\n\nQuestion: Is your stress level lower if you eat better that day (or previous days)?\n\n\n\n\n\n\n\n\n\n\nThere was no association between eating habits for the day and stress level that day (p=0.662; table shown).\n\n \n\nThere was no association between eating habits from previous days and stress level – one day previous (p=0.679; table not shown) or two days previous (p=0.648; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#electrolytes-and-stress-level",
+    "href": "Results_2324.html#electrolytes-and-stress-level",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Electrolytes and Stress Level",
+    "text": "Electrolytes and Stress Level\n\nQuestion: Is your stress level lower if you drink electrolytes that day?\n\n\n\n\n\n\n\n\n\n\nThere was no association between having electrolytes for the day and your stress level that day (p=0.532; table shown).\n\n \n\nThere was no association between having electrolytes on previous days and your stress level – one day previous (p=0.472; table not shown) or two days previous (p=0.244; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#alcohol-and-stress-level-i",
+    "href": "Results_2324.html#alcohol-and-stress-level-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Alcohol and Stress Level I",
+    "text": "Alcohol and Stress Level I\n\nQuestion: Is your stress level different if you drink alcohol that day?\n\n\n\n\n\n\n\n\n\n\nThere was no association between having alcohol for the day and your stress level that day (p=0.245; table shown)."
+  },
+  {
+    "objectID": "Results_2324.html#alcohol-and-stress-level-ii",
+    "href": "Results_2324.html#alcohol-and-stress-level-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Alcohol and Stress Level II",
+    "text": "Alcohol and Stress Level II\n\nQuestion: Is your stress level different if you drink alcohol on previous days?\n\n\n\n\n\n\n\n\n\n\nThere was no association between having alcohol on previous days and how your body felt – one day previous (p=0.052; table shown) or two days previous (p=0.071; table not shown).\nHowever, your stress level was somewhat lower/better on days following having consumed alcohol."
+  },
+  {
+    "objectID": "Results_2324.html#period-and-how-body-feels-1",
+    "href": "Results_2324.html#period-and-how-body-feels-1",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Period and How Body Feels",
+    "text": "Period and How Body Feels\n\nQuestion: Is your stress level worse when you are on your period?\n\n\n\n\n\n\n\n\n\n\nThere was no association between being on your period for the day and your stress level that day (p=0.445; table shown).\nHowever, there is some indication that your stress level is slightly “worse” when on your period."
+  },
+  {
+    "objectID": "Results_2324.html#workouts-and-sleep",
+    "href": "Results_2324.html#workouts-and-sleep",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Workouts and Sleep",
+    "text": "Workouts and Sleep\n\nQuestion: Do you get more sleep when you do not have a workout that day?\n\n\n\n\n\n\n\n\n\n\nThere was an association between hours of sleep that night prior to a workout day (p=0.037; table shown).\nThere is evidence that you get more sleep prior to workout days."
+  },
+  {
+    "objectID": "Results_2324.html#workout-and-body-feels",
+    "href": "Results_2324.html#workout-and-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Workout and Body Feels",
+    "text": "Workout and Body Feels\n\nQuestion: Does your body feel differently depending on whether you worked out that day or not?\n\n\n\n\n\n\n\n\n\n\nThere was no association between whether you worked out or not and how your body felt that day (p=0.080; table shown).\nHowever, there is some evidence that you felt somewhat better when you did not work out.\n\n \n\nThere was no association between whether you worked out or not on previous days and how your body felt – one day previous (p=0.862; table not shown) or two days previous (p=0.464; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#lifting-and-body-feels",
+    "href": "Results_2324.html#lifting-and-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Lifting and Body Feels",
+    "text": "Lifting and Body Feels\n\nQuestion: Does your body feel differently depending on whether you lifted that day or not?\n\n\n\n\n\n\n\n\n\n\nThere was no association between whether you lifted or not and how your body felt that day (p=0.152; table shown).\n\n \n\nThere was no association between whether youlifted or not on previous days and how your body felt – one day previous (p=0.365; table not shown) or two days previous (p=0.866; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#eating-habits-and-body-feels",
+    "href": "Results_2324.html#eating-habits-and-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Eating Habits and Body Feels",
+    "text": "Eating Habits and Body Feels\n\nQuestion: Does your body feel better if you eat better that day (or previous days)?\n\n\n\n\n\n\n\n\n\n\nThere was no association between eating habits for the day and how your body felt that day (p=0.664; table shown).\n\n \n\nThere was no association between eating habits from previous days and how your body felt – one day previous (p=0.561; table not shown) or two days previous (p=0.693; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#electrolytes-and-body-feels",
+    "href": "Results_2324.html#electrolytes-and-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Electrolytes and Body Feels",
+    "text": "Electrolytes and Body Feels\n\nQuestion: Does your body feel better if you drink electrolytes that day?\n\n\n\n\n\n\n\n\n\n\nThere was no association between having electrolytes for the day and how your body felt that day (p=0.469; table shown).\n\n \n\nThere was no association between having electrolytes on previous days and how your body felt – one day previous (p=0.427; table not shown) or two days previous (p=0.060; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#alcohol-and-body-feels-i",
+    "href": "Results_2324.html#alcohol-and-body-feels-i",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Alcohol and Body Feels I",
+    "text": "Alcohol and Body Feels I\n\nQuestion: Does your body feel better if you drink alcohol that day?\n\n\n\n\n\n\n\n\n\n\nThere was no association between having alcohol for the day and how your body felt that day (p=0.304; table shown)."
+  },
+  {
+    "objectID": "Results_2324.html#alcohol-and-body-feels-ii",
+    "href": "Results_2324.html#alcohol-and-body-feels-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Alcohol and Body Feels II",
+    "text": "Alcohol and Body Feels II\n\nQuestion: Does your body feel better if you drink alcohol on previous days?\n\n\n\n\n\n\n\n\n\n\nThere was no association between having alcohol on previous days and how your body felt – one day previous (p=0.593; table shown) or two days previous (p=0.666; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#period-and-body-feels",
+    "href": "Results_2324.html#period-and-body-feels",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Period and Body Feels",
+    "text": "Period and Body Feels\n\nQuestion: Does your body feel worse if you are on your period?\n\n\n\n\n\n\n\n\n\n\nThere was no association between being on your period for the day and how your body felt that day (p=0.066; table shown).\nHowever, there is some indication that your body feels “worse” when on your period."
+  },
+  {
+    "objectID": "Results_2324.html#lifting-and-stress-level",
+    "href": "Results_2324.html#lifting-and-stress-level",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Lifting and Stress Level",
+    "text": "Lifting and Stress Level\n\nQuestion: Does your stress level depend on whether you lifted that day or not?\n\n\n\n\n\n\n\n\n\n\nThere was no association between whether you lifted or not and your stress level that day (p=0.716; table shown).\n\n \n\nThere was no association between whether you lifted or not on previous days and your stress level – one day previous (p=0.165; table not shown) or two days previous (p=0.384; table not shown)."
+  },
+  {
+    "objectID": "Results_2324.html#period-and-stress-level",
+    "href": "Results_2324.html#period-and-stress-level",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Period and Stress Level",
+    "text": "Period and Stress Level\n\nQuestion: Is your stress level worse when you are on your period?\n\n\n\n\n\n\n\n\n\n\nThere was no association between being on your period for the day and your stress level that day (p=0.445; table shown).\nHowever, there is some indication that your stress level is slightly “worse” when on your period."
+  },
+  {
+    "objectID": "Results_2324.html#eating-habits-and-sleep",
+    "href": "Results_2324.html#eating-habits-and-sleep",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Eating Habits and Sleep",
+    "text": "Eating Habits and Sleep\n\nQuestion: Do you get less sleep when you eat more poorly that day?\n\n\n\n\n\n\n\n\n\n\nThere was no association between hours of sleep the night after the day’s eating habit (p=0.078; table shown)."
+  },
+  {
+    "objectID": "Results_2324.html#perod-and-sleep",
+    "href": "Results_2324.html#perod-and-sleep",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Perod and Sleep",
+    "text": "Perod and Sleep\n\nQuestion: Do you get more or less sleep when you are on your period?\n\n\n\n\n\n\n\n\n\n\nThere was no association between hours of sleep and whether you were on your period or not (p=0.461; table shown)."
+  },
+  {
+    "objectID": "Results_2324.html#training-type-and-eating-habits-ii",
+    "href": "Results_2324.html#training-type-and-eating-habits-ii",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Training Type and Eating Habits II",
+    "text": "Training Type and Eating Habits II\n\nQuestion: Is your stress level lower if you eat better that day (or previous days)?\n\n\n\n\n\n\n\n\n\n\nThere is an association between workout days and eating habits (p=0.000).\nIt appears that you eat more balanced meals and fewer “not good” meals on your training days, as compared to your rest days."
+  },
+  {
+    "objectID": "Results_2324.html#workout-and-eating-habits",
+    "href": "Results_2324.html#workout-and-eating-habits",
+    "title": "Journey’s Daily Data 2023-24",
+    "section": "Workout and Eating Habits",
+    "text": "Workout and Eating Habits\n\nQuestion: Do your eating habits differ based on whether you workout or not?\n\n\n\n\n\n\n\n\n\n\nThere is an association between workout days and eating habits (p=0.000).\nIt appears that you eat more balanced meals and fewer “not good” meals on your training days, as compared to your rest days."
   }
 ]

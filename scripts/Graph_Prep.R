@@ -6,7 +6,7 @@ clr_bar <- clr_pt
 clr_bkgline <- "gray85"
 clr_comp <- "red3"
 fill_bar <- "aquamarine2"
-fill_wo <- c("No"="white","Yes"="gray50")
+fill_wo <- c("No Workout"="white","Workout"="gray50")
 fill_tile <- c(low="aquamarine",high="aquamarine4")
 lty_comp <- "dashed"
 lwd_comp <- 0.5
